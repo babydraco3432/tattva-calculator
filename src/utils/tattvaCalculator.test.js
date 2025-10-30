@@ -96,10 +96,10 @@ describe('Tattva Calculator', () => {
       expect(result.macrotideRemainingMinutes).toBeLessThanOrEqual(24);
     });
 
-    test('microtide remaining time should be between 0 and 5 minutes', () => {
+    test('microtide remaining time should be between 0 and 4.8 minutes', () => {
       const result = calculateTattva();
       expect(result.microtideRemainingMinutes).toBeGreaterThan(0);
-      expect(result.microtideRemainingMinutes).toBeLessThanOrEqual(5);
+      expect(result.microtideRemainingMinutes).toBeLessThanOrEqual(4.8);
     });
 
     test('microtide should change every ~4.8 minutes', () => {
