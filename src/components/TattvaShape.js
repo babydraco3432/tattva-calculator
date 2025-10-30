@@ -3,6 +3,9 @@ import React from 'react';
 const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => {
   const { shape, backgroundColor, shapeColor, name } = tattva;
 
+  // Check if microtide is different from macrotide
+  const showMicrotide = microtide && microtide.name !== tattva.name;
+
   // Container with background color (macrotide)
   const containerStyle = {
     display: 'inline-flex',
@@ -96,11 +99,13 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
   };
 
   const renderMicrotideShape = () => {
-    if (!microtide) return null;
+    // Only render if microtide is different from macrotide
+    if (!showMicrotide) return null;
 
     const microtideSize = size * 0.4; // Smaller size for nested microtide
-    const { shape: microShape, shapeColor: microColor } = microtide;
+    const { shape: microShape, shapeColor: microColor, backgroundColor: microBg } = microtide;
 
+    // Use the microtide's background color instead of white
     const microStyle = {
       position: 'absolute',
       top: '10%',
@@ -110,7 +115,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
       justifyContent: 'center',
       width: microtideSize * 1.2,
       height: microtideSize * 1.2,
-      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+      backgroundColor: microBg, // Use microtide's background color
       borderRadius: '5px',
       border: '2px solid #333',
       boxShadow: '0 2px 4px rgba(0,0,0,0.3)',

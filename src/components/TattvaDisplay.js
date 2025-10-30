@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TattvaShape from './TattvaShape';
 
-const TattvaDisplay = ({ tattvaData, currentTime }) => {
+const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode }) => {
   const { macrotide, microtide, macrotideRemainingMinutes, microtideRemainingMinutes, sunrise } = tattvaData;
-  const [scryingMode, setScryingMode] = useState(false);
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -88,48 +87,51 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
 
   return (
     <>
-      <div style={containerStyle}>
-        <div style={timeDisplayStyle}>
-          Current Time: {formatTime(currentTime)}
-        </div>
-        
-        <div style={sunriseStyle}>
-          Sunrise: {formatTime(sunrise)}
-        </div>
-
-        {/* Single clickable card - just the shape */}
-        <div 
-          style={cardStyle}
-          onClick={() => setScryingMode(true)}
-        >
-          <TattvaShape 
-            tattva={macrotide} 
-            microtide={microtide}
-            size={200} 
-          />
-        </div>
-
-        {/* Information below the card */}
-        <div style={infoSectionStyle}>
-          <div style={titleStyle}>
-            {microtide.name} of {macrotide.name}
+      {/* Hide normal view when in scrying mode */}
+      {!scryingMode && (
+        <div style={containerStyle}>
+          <div style={timeDisplayStyle}>
+            Current Time: {formatTime(currentTime)}
           </div>
           
-          <div style={detailStyle}>
-            <strong>Current Macrotide:</strong> {macrotide.name} ({macrotide.element})
-            <div style={timeRemainingStyle}>
-              {macrotideRemainingMinutes} minutes remaining
-            </div>
+          <div style={sunriseStyle}>
+            Sunrise: {formatTime(sunrise)}
           </div>
 
-          <div style={detailStyle}>
-            <strong>Current Microtide:</strong> {microtide.name} ({microtide.element})
-            <div style={timeRemainingStyle}>
-              {microtideRemainingMinutes.toFixed(1)} minutes remaining
+          {/* Single clickable card - just the shape */}
+          <div 
+            style={cardStyle}
+            onClick={() => setScryingMode(true)}
+          >
+            <TattvaShape 
+              tattva={macrotide} 
+              microtide={microtide}
+              size={200} 
+            />
+          </div>
+
+          {/* Information below the card */}
+          <div style={infoSectionStyle}>
+            <div style={titleStyle}>
+              {microtide.name} of {macrotide.name}
+            </div>
+            
+            <div style={detailStyle}>
+              <strong>Current Macrotide:</strong> {macrotide.name} ({macrotide.element})
+              <div style={timeRemainingStyle}>
+                {macrotideRemainingMinutes} minutes remaining
+              </div>
+            </div>
+
+            <div style={detailStyle}>
+              <strong>Current Microtide:</strong> {microtide.name} ({microtide.element})
+              <div style={timeRemainingStyle}>
+                {microtideRemainingMinutes.toFixed(1)} minutes remaining
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Scrying Mode Overlay */}
       {scryingMode && (

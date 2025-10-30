@@ -5,6 +5,7 @@ import { calculateTattva } from './utils/tattvaCalculator';
 function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [tattvaData, setTattvaData] = useState(calculateTattva());
+  const [scryingMode, setScryingMode] = useState(false);
 
   useEffect(() => {
     // Update the time and tattva data every second
@@ -45,14 +46,22 @@ function App() {
 
   return (
     <div style={appStyle}>
-      <header style={headerStyle}>
-        <h1 style={titleStyle}>Tattva Calculator</h1>
-        <p style={subtitleStyle}>
-          Discover the current elemental energies influencing the moment
-        </p>
-      </header>
+      {/* Hide header in scrying mode */}
+      {!scryingMode && (
+        <header style={headerStyle}>
+          <h1 style={titleStyle}>Tattva Calculator</h1>
+          <p style={subtitleStyle}>
+            Discover the current elemental energies influencing the moment
+          </p>
+        </header>
+      )}
       
-      <TattvaDisplay tattvaData={tattvaData} currentTime={currentTime} />
+      <TattvaDisplay 
+        tattvaData={tattvaData} 
+        currentTime={currentTime}
+        scryingMode={scryingMode}
+        setScryingMode={setScryingMode}
+      />
     </div>
   );
 }
