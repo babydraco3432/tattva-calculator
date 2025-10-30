@@ -14,15 +14,15 @@ describe('App Component', () => {
     expect(subtitleElement).toBeInTheDocument();
   });
 
-  test('renders macrotide section', () => {
+  test('renders current macrotide information', () => {
     render(<App />);
-    const macrotideElement = screen.getByText(/Macrotide \(Main Tattva\)/i);
+    const macrotideElement = screen.getByText(/Current Macrotide:/i);
     expect(macrotideElement).toBeInTheDocument();
   });
 
-  test('renders microtide section', () => {
+  test('renders current microtide information', () => {
     render(<App />);
-    const microtideElement = screen.getByText(/Microtide \(Sub-Tattva\)/i);
+    const microtideElement = screen.getByText(/Current Microtide:/i);
     expect(microtideElement).toBeInTheDocument();
   });
 
@@ -38,9 +38,10 @@ describe('App Component', () => {
     expect(sunriseElement).toBeInTheDocument();
   });
 
-  test('renders tattva cycle information', () => {
+  test('renders "of" format showing microtide of macrotide', () => {
     render(<App />);
-    const cycleInfo = screen.getByText(/The tattva cycle repeats every 2 hours/i);
-    expect(cycleInfo).toBeInTheDocument();
+    // The format should be like "Vayu of Akasha"
+    const ofText = screen.getByText(/of/i);
+    expect(ofText).toBeInTheDocument();
   });
 });

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TattvaShape from './TattvaShape';
 
 const TattvaDisplay = ({ tattvaData, currentTime }) => {
   const { macrotide, microtide, macrotideRemainingMinutes, microtideRemainingMinutes, sunrise } = tattvaData;
+  const [scryingMode, setScryingMode] = useState(false);
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -18,7 +19,7 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
     alignItems: 'center',
     padding: '20px',
     fontFamily: 'Arial, sans-serif',
-    maxWidth: '500px',
+    maxWidth: '600px',
     margin: '0 auto',
   };
 
@@ -35,109 +36,116 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
     marginBottom: '30px',
   };
 
-  // Single vertical card that combines both macrotide and microtide
-  const combinedCardStyle = {
-    width: '100%',
-    maxWidth: '400px',
-    border: '3px solid #333',
-    borderRadius: '15px',
-    overflow: 'hidden',
-    boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
-    backgroundColor: '#ffffff',
+  // Single card - just the visual, clickable
+  const cardStyle = {
+    cursor: 'pointer',
+    transition: 'transform 0.3s ease',
+    marginBottom: '20px',
   };
 
-  const sectionStyle = {
-    padding: '25px',
+  // Scrying mode overlay
+  const scryingOverlayStyle = {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+    cursor: 'pointer',
+  };
+
+  // Information section below the card
+  const infoSectionStyle = {
     textAlign: 'center',
+    width: '100%',
+    maxWidth: '500px',
   };
 
   const titleStyle = {
-    fontSize: '20px',
+    fontSize: '28px',
     fontWeight: 'bold',
     marginBottom: '15px',
-    color: '#333',
-    textTransform: 'uppercase',
-    letterSpacing: '1px',
+    color: '#222',
   };
 
-  const infoStyle = {
-    margin: '8px 0',
+  const detailStyle = {
     fontSize: '16px',
-    color: '#333',
-    fontWeight: '500',
+    margin: '10px 0',
+    color: '#444',
+    lineHeight: '1.6',
   };
 
-  const remainingTimeStyle = {
+  const timeRemainingStyle = {
     fontSize: '18px',
     fontWeight: 'bold',
     color: '#FF1744',
-    marginTop: '12px',
-    padding: '8px',
-    backgroundColor: '#FFF3E0',
-    borderRadius: '5px',
-  };
-
-  const dividerStyle = {
-    height: '2px',
-    backgroundColor: '#333',
-    margin: '0',
+    marginTop: '5px',
   };
 
   return (
-    <div style={containerStyle}>
-      <div style={timeDisplayStyle}>
-        Current Time: {formatTime(currentTime)}
-      </div>
-      
-      <div style={sunriseStyle}>
-        Sunrise: {formatTime(sunrise)}
-      </div>
-
-      {/* Single combined vertical card */}
-      <div style={combinedCardStyle}>
-        {/* Macrotide Section */}
-        <div style={sectionStyle}>
-          <div style={titleStyle}>Macrotide (Main Tattva)</div>
-          <TattvaShape tattva={macrotide} size={150} isMicrotide={false} />
-          <div style={infoStyle}><strong>{macrotide.name}</strong> - {macrotide.element}</div>
-          <div style={infoStyle}>{macrotide.description}</div>
-          <div style={remainingTimeStyle}>
-            ⏱ {macrotideRemainingMinutes} min remaining
-          </div>
+    <>
+      <div style={containerStyle}>
+        <div style={timeDisplayStyle}>
+          Current Time: {formatTime(currentTime)}
+        </div>
+        
+        <div style={sunriseStyle}>
+          Sunrise: {formatTime(sunrise)}
         </div>
 
-        {/* Divider */}
-        <div style={dividerStyle}></div>
+        {/* Single clickable card - just the shape */}
+        <div 
+          style={cardStyle}
+          onClick={() => setScryingMode(true)}
+        >
+          <TattvaShape 
+            tattva={macrotide} 
+            microtide={microtide}
+            size={200} 
+          />
+        </div>
 
-        {/* Microtide Section */}
-        <div style={sectionStyle}>
-          <div style={titleStyle}>Microtide (Sub-Tattva)</div>
-          <TattvaShape tattva={microtide} size={120} isMicrotide={true} />
-          <div style={infoStyle}><strong>{microtide.name}</strong> - {microtide.element}</div>
-          <div style={infoStyle}>{microtide.description}</div>
-          <div style={remainingTimeStyle}>
-            ⏱ {microtideRemainingMinutes.toFixed(1)} min remaining
+        {/* Information below the card */}
+        <div style={infoSectionStyle}>
+          <div style={titleStyle}>
+            {microtide.name} of {macrotide.name}
+          </div>
+          
+          <div style={detailStyle}>
+            <strong>Current Macrotide:</strong> {macrotide.name} ({macrotide.element})
+            <div style={timeRemainingStyle}>
+              {macrotideRemainingMinutes} minutes remaining
+            </div>
+          </div>
+
+          <div style={detailStyle}>
+            <strong>Current Microtide:</strong> {microtide.name} ({microtide.element})
+            <div style={timeRemainingStyle}>
+              {microtideRemainingMinutes.toFixed(1)} minutes remaining
+            </div>
           </div>
         </div>
       </div>
 
-      <div style={{ 
-        marginTop: '25px', 
-        padding: '15px', 
-        backgroundColor: '#E3F2FD',
-        borderRadius: '8px',
-        textAlign: 'center',
-        width: '100%',
-        maxWidth: '400px',
-      }}>
-        <p style={{ margin: '5px 0', fontSize: '13px', color: '#555', fontWeight: '500' }}>
-          The tattva cycle repeats every 2 hours (120 minutes)
-        </p>
-        <p style={{ margin: '5px 0', fontSize: '13px', color: '#555', fontWeight: '500' }}>
-          Each macrotide lasts 24 minutes, with 5 microtides of 4.8 minutes each
-        </p>
-      </div>
-    </div>
+      {/* Scrying Mode Overlay */}
+      {scryingMode && (
+        <div 
+          style={scryingOverlayStyle}
+          onClick={() => setScryingMode(false)}
+        >
+          <TattvaShape 
+            tattva={macrotide} 
+            microtide={microtide}
+            size={400} 
+            scryingMode={true}
+          />
+        </div>
+      )}
+    </>
   );
 };
 
