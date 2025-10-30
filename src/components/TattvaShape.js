@@ -22,22 +22,21 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     position: 'relative',
   };
 
-  const shapeStyle = {
-    display: 'inline-block',
-    width: size,
-    height: size,
-  };
-
   const renderMacrotideShape = () => {
     switch (shape) {
       case 'oval':
+        // Egg/oval shape - properly centered
         return (
           <div
             style={{
-              ...shapeStyle,
+              width: size * 0.75,
+              height: size,
               backgroundColor: shapeColor,
               borderRadius: '50%',
-              transform: 'scaleY(1.3)',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             title={name}
           />
@@ -47,15 +46,21 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         return (
           <div
             style={{
-              ...shapeStyle,
+              width: size,
+              height: size,
               backgroundColor: shapeColor,
               borderRadius: '50%',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             title={name}
           />
         );
 
       case 'triangle':
+        // Triangle - properly centered
         return (
           <div
             style={{
@@ -64,30 +69,48 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               borderLeft: `${size / 2}px solid transparent`,
               borderRight: `${size / 2}px solid transparent`,
               borderBottom: `${size}px solid ${shapeColor}`,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             title={name}
           />
         );
 
       case 'crescent':
+        // Crescent - properly centered using SVG for better control
         return (
-          <div
+          <svg
+            width={size}
+            height={size}
+            viewBox="0 0 100 100"
             style={{
-              ...shapeStyle,
-              backgroundColor: shapeColor,
-              borderRadius: '50%',
-              clipPath: 'ellipse(50% 50% at 30% 50%)',
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             title={name}
-          />
+          >
+            <path
+              d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
+              fill={shapeColor}
+            />
+          </svg>
         );
 
       case 'square':
         return (
           <div
             style={{
-              ...shapeStyle,
+              width: size,
+              height: size,
               backgroundColor: shapeColor,
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
             }}
             title={name}
           />
@@ -105,8 +128,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     const microtideSize = size * 0.4; // Smaller size for nested microtide
     const { shape: microShape, shapeColor: microColor, backgroundColor: microBg } = microtide;
 
-    // Use the microtide's background color instead of white
-    const microStyle = {
+    // Use the microtide's background color
+    const microContainerStyle = {
       position: 'absolute',
       top: '10%',
       right: '10%',
@@ -115,49 +138,49 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
       justifyContent: 'center',
       width: microtideSize * 1.2,
       height: microtideSize * 1.2,
-      backgroundColor: microBg, // Use microtide's background color
+      backgroundColor: microBg,
       borderRadius: '5px',
       border: '2px solid #333',
       boxShadow: '0 2px 4px rgba(0,0,0,0.3)',
     };
 
-    const microShapeStyle = {
-      display: 'inline-block',
-      width: microtideSize,
-      height: microtideSize,
-    };
-
-    switch (microShape) {
-      case 'oval':
-        return (
-          <div style={microStyle}>
+    const renderMicroShape = () => {
+      switch (microShape) {
+        case 'oval':
+          // Egg/oval shape - properly centered
+          return (
             <div
               style={{
-                ...microShapeStyle,
+                width: microtideSize * 0.75,
+                height: microtideSize,
                 backgroundColor: microColor,
                 borderRadius: '50%',
-                transform: 'scaleY(1.3)',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
               }}
             />
-          </div>
-        );
+          );
 
-      case 'circle':
-        return (
-          <div style={microStyle}>
+        case 'circle':
+          return (
             <div
               style={{
-                ...microShapeStyle,
+                width: microtideSize,
+                height: microtideSize,
                 backgroundColor: microColor,
                 borderRadius: '50%',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
               }}
             />
-          </div>
-        );
+          );
 
-      case 'triangle':
-        return (
-          <div style={microStyle}>
+        case 'triangle':
+          return (
             <div
               style={{
                 width: 0,
@@ -165,40 +188,60 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
                 borderLeft: `${microtideSize / 2}px solid transparent`,
                 borderRight: `${microtideSize / 2}px solid transparent`,
                 borderBottom: `${microtideSize}px solid ${microColor}`,
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
               }}
             />
-          </div>
-        );
+          );
 
-      case 'crescent':
-        return (
-          <div style={microStyle}>
+        case 'crescent':
+          // Crescent - properly centered using SVG
+          return (
+            <svg
+              width={microtideSize}
+              height={microtideSize}
+              viewBox="0 0 100 100"
+              style={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+            >
+              <path
+                d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
+                fill={microColor}
+              />
+            </svg>
+          );
+
+        case 'square':
+          return (
             <div
               style={{
-                ...microShapeStyle,
+                width: microtideSize,
+                height: microtideSize,
                 backgroundColor: microColor,
-                borderRadius: '50%',
-                clipPath: 'ellipse(50% 50% at 30% 50%)',
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
               }}
             />
-          </div>
-        );
+          );
 
-      case 'square':
-        return (
-          <div style={microStyle}>
-            <div
-              style={{
-                ...microShapeStyle,
-                backgroundColor: microColor,
-              }}
-            />
-          </div>
-        );
+        default:
+          return null;
+      }
+    };
 
-      default:
-        return null;
-    }
+    return (
+      <div style={microContainerStyle}>
+        {renderMicroShape()}
+      </div>
+    );
   };
 
   return (
