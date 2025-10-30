@@ -18,13 +18,13 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
     alignItems: 'center',
     padding: '20px',
     fontFamily: 'Arial, sans-serif',
-    maxWidth: '800px',
+    maxWidth: '500px',
     margin: '0 auto',
   };
 
   const timeDisplayStyle = {
     fontSize: '24px',
-    marginBottom: '20px',
+    marginBottom: '10px',
     fontWeight: 'bold',
     color: '#333',
   };
@@ -35,43 +35,52 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
     marginBottom: '30px',
   };
 
-  const tattvaContainerStyle = {
-    display: 'flex',
-    justifyContent: 'space-around',
+  // Single vertical card that combines both macrotide and microtide
+  const combinedCardStyle = {
     width: '100%',
-    marginBottom: '30px',
-    gap: '40px',
-    flexWrap: 'wrap',
+    maxWidth: '400px',
+    border: '3px solid #333',
+    borderRadius: '15px',
+    overflow: 'hidden',
+    boxShadow: '0 8px 16px rgba(0,0,0,0.3)',
+    backgroundColor: '#ffffff',
   };
 
-  const tattvaCardStyle = {
-    flex: '1',
-    minWidth: '250px',
-    border: '2px solid #ddd',
-    borderRadius: '10px',
-    padding: '20px',
-    backgroundColor: '#f9f9f9',
-    boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+  const sectionStyle = {
+    padding: '25px',
+    textAlign: 'center',
   };
 
   const titleStyle = {
-    fontSize: '18px',
+    fontSize: '20px',
     fontWeight: 'bold',
-    marginBottom: '10px',
-    color: '#444',
+    marginBottom: '15px',
+    color: '#333',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   };
 
   const infoStyle = {
-    margin: '5px 0',
-    fontSize: '14px',
-    color: '#666',
+    margin: '8px 0',
+    fontSize: '16px',
+    color: '#333',
+    fontWeight: '500',
   };
 
   const remainingTimeStyle = {
-    fontSize: '16px',
+    fontSize: '18px',
     fontWeight: 'bold',
-    color: '#ff6b6b',
-    marginTop: '10px',
+    color: '#FF1744',
+    marginTop: '12px',
+    padding: '8px',
+    backgroundColor: '#FFF3E0',
+    borderRadius: '5px',
+  };
+
+  const dividerStyle = {
+    height: '2px',
+    backgroundColor: '#333',
+    margin: '0',
   };
 
   return (
@@ -84,42 +93,47 @@ const TattvaDisplay = ({ tattvaData, currentTime }) => {
         Sunrise: {formatTime(sunrise)}
       </div>
 
-      <div style={tattvaContainerStyle}>
-        <div style={tattvaCardStyle}>
+      {/* Single combined vertical card */}
+      <div style={combinedCardStyle}>
+        {/* Macrotide Section */}
+        <div style={sectionStyle}>
           <div style={titleStyle}>Macrotide (Main Tattva)</div>
-          <TattvaShape tattva={macrotide} size={120} />
-          <div style={infoStyle}><strong>Name:</strong> {macrotide.name}</div>
-          <div style={infoStyle}><strong>Element:</strong> {macrotide.element}</div>
-          <div style={infoStyle}><strong>Description:</strong> {macrotide.description}</div>
+          <TattvaShape tattva={macrotide} size={150} isMicrotide={false} />
+          <div style={infoStyle}><strong>{macrotide.name}</strong> - {macrotide.element}</div>
+          <div style={infoStyle}>{macrotide.description}</div>
           <div style={remainingTimeStyle}>
-            Time Remaining: {macrotideRemainingMinutes} min
+            ⏱ {macrotideRemainingMinutes} min remaining
           </div>
         </div>
 
-        <div style={tattvaCardStyle}>
+        {/* Divider */}
+        <div style={dividerStyle}></div>
+
+        {/* Microtide Section */}
+        <div style={sectionStyle}>
           <div style={titleStyle}>Microtide (Sub-Tattva)</div>
           <TattvaShape tattva={microtide} size={120} isMicrotide={true} />
-          <div style={infoStyle}><strong>Name:</strong> {microtide.name}</div>
-          <div style={infoStyle}><strong>Element:</strong> {microtide.element}</div>
-          <div style={infoStyle}><strong>Description:</strong> {microtide.description}</div>
+          <div style={infoStyle}><strong>{microtide.name}</strong> - {microtide.element}</div>
+          <div style={infoStyle}>{microtide.description}</div>
           <div style={remainingTimeStyle}>
-            Time Remaining: {microtideRemainingMinutes.toFixed(1)} min
+            ⏱ {microtideRemainingMinutes.toFixed(1)} min remaining
           </div>
         </div>
       </div>
 
       <div style={{ 
-        marginTop: '20px', 
+        marginTop: '25px', 
         padding: '15px', 
-        backgroundColor: '#e8f4f8',
+        backgroundColor: '#E3F2FD',
         borderRadius: '8px',
         textAlign: 'center',
         width: '100%',
+        maxWidth: '400px',
       }}>
-        <p style={{ margin: '5px 0', fontSize: '14px', color: '#555' }}>
+        <p style={{ margin: '5px 0', fontSize: '13px', color: '#555', fontWeight: '500' }}>
           The tattva cycle repeats every 2 hours (120 minutes)
         </p>
-        <p style={{ margin: '5px 0', fontSize: '14px', color: '#555' }}>
+        <p style={{ margin: '5px 0', fontSize: '13px', color: '#555', fontWeight: '500' }}>
           Each macrotide lasts 24 minutes, with 5 microtides of 4.8 minutes each
         </p>
       </div>

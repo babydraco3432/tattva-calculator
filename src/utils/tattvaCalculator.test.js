@@ -15,7 +15,8 @@ describe('Tattva Calculator', () => {
       TATTWAS.forEach(tattva => {
         expect(tattva).toHaveProperty('name');
         expect(tattva).toHaveProperty('element');
-        expect(tattva).toHaveProperty('color');
+        expect(tattva).toHaveProperty('backgroundColor');
+        expect(tattva).toHaveProperty('shapeColor');
         expect(tattva).toHaveProperty('shape');
         expect(tattva).toHaveProperty('description');
       });

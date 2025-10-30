@@ -1,79 +1,100 @@
 import React from 'react';
 
 const TattvaShape = ({ tattva, size = 100, isMicrotide = false }) => {
-  const { shape, color, name } = tattva;
-  const opacity = isMicrotide ? 0.6 : 1;
+  const { shape, backgroundColor, shapeColor, name } = tattva;
 
   const renderShape = () => {
-    const commonStyle = {
+    // Container with background color
+    const containerStyle = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: size * 1.5,
+      height: size * 1.5,
+      backgroundColor: backgroundColor,
+      borderRadius: '10px',
+      border: '3px solid #333',
+      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
+    };
+
+    const shapeStyle = {
       display: 'inline-block',
       width: size,
       height: size,
-      backgroundColor: shape !== 'triangle' && shape !== 'crescent' ? color : 'transparent',
-      opacity: opacity,
     };
 
     switch (shape) {
       case 'oval':
         return (
-          <div
-            style={{
-              ...commonStyle,
-              borderRadius: '50%',
-              transform: 'scaleY(1.3)',
-            }}
-            title={name}
-          />
+          <div style={containerStyle}>
+            <div
+              style={{
+                ...shapeStyle,
+                backgroundColor: shapeColor,
+                borderRadius: '50%',
+                transform: 'scaleY(1.3)',
+              }}
+              title={name}
+            />
+          </div>
         );
 
       case 'circle':
         return (
-          <div
-            style={{
-              ...commonStyle,
-              borderRadius: '50%',
-            }}
-            title={name}
-          />
+          <div style={containerStyle}>
+            <div
+              style={{
+                ...shapeStyle,
+                backgroundColor: shapeColor,
+                borderRadius: '50%',
+              }}
+              title={name}
+            />
+          </div>
         );
 
       case 'triangle':
         return (
-          <div
-            style={{
-              ...commonStyle,
-              width: 0,
-              height: 0,
-              backgroundColor: 'transparent',
-              borderLeft: `${size / 2}px solid transparent`,
-              borderRight: `${size / 2}px solid transparent`,
-              borderBottom: `${size}px solid ${color}`,
-            }}
-            title={name}
-          />
+          <div style={containerStyle}>
+            <div
+              style={{
+                width: 0,
+                height: 0,
+                borderLeft: `${size / 2}px solid transparent`,
+                borderRight: `${size / 2}px solid transparent`,
+                borderBottom: `${size}px solid ${shapeColor}`,
+              }}
+              title={name}
+            />
+          </div>
         );
 
       case 'crescent':
         return (
-          <div
-            style={{
-              ...commonStyle,
-              borderRadius: '50%',
-              boxShadow: `${size / 4}px 0 0 0 ${color}`,
-              backgroundColor: 'transparent',
-            }}
-            title={name}
-          />
+          <div style={containerStyle}>
+            <div
+              style={{
+                ...shapeStyle,
+                backgroundColor: shapeColor,
+                borderRadius: '50%',
+                clipPath: 'ellipse(50% 50% at 30% 50%)',
+              }}
+              title={name}
+            />
+          </div>
         );
 
       case 'square':
         return (
-          <div
-            style={{
-              ...commonStyle,
-            }}
-            title={name}
-          />
+          <div style={containerStyle}>
+            <div
+              style={{
+                ...shapeStyle,
+                backgroundColor: shapeColor,
+              }}
+              title={name}
+            />
+          </div>
         );
 
       default:
@@ -83,12 +104,10 @@ const TattvaShape = ({ tattva, size = 100, isMicrotide = false }) => {
 
   return (
     <div style={{ 
-      display: 'inline-flex', 
+      display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center',
-      padding: '20px',
-      minWidth: size + 40,
-      minHeight: size + 40,
+      padding: '15px',
     }}>
       {renderShape()}
     </div>
