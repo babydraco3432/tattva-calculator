@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { calculateTattva } from '../utils/tattvaCalculator';
 import { DURATIONS } from '../constants/styles';
 
@@ -10,22 +10,29 @@ import { DURATIONS } from '../constants/styles';
 export const useTattvaUpdates = (userLocation) => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [tattvaData, setTattvaData] = useState(calculateTattva());
+  const locationRef = useRef(userLocation);
+
+  // Update location ref when it changes
+  useEffect(() => {
+    locationRef.current = userLocation;
+  }, [userLocation]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
       
-      // Pass user location if available, otherwise use default
-      if (userLocation) {
-        setTattvaData(calculateTattva(now, userLocation.latitude, userLocation.longitude));
+      // Use ref to get latest location without restarting timer
+      const location = locationRef.current;
+      if (location) {
+        setTattvaData(calculateTattva(now, location.latitude, location.longitude));
       } else {
         setTattvaData(calculateTattva(now));
       }
     }, DURATIONS.UPDATE_INTERVAL_MS);
 
     return () => clearInterval(timer);
-  }, [userLocation]);
+  }, []); // Empty dependency array - timer runs once
 
   return { currentTime, tattvaData };
 };
