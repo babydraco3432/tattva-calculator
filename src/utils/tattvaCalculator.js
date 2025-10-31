@@ -1,9 +1,25 @@
-// Tattva Calculator
-// The tattva cycle starts at sunrise and each tattva lasts for 24 minutes
-// There are 5 tattwas that cycle throughout the day
+/**
+ * Tattva Calculator - Core calculation logic
+ * 
+ * The tattva cycle starts at sunrise and each tattva lasts for 24 minutes.
+ * There are 5 tattwas that cycle throughout the day:
+ * - Akasha (Ether)
+ * - Vayu (Air)
+ * - Tejas (Fire)
+ * - Apas (Water)
+ * - Prithvi (Earth)
+ * 
+ * Each complete cycle lasts 10 hours (600 minutes), with each macrotide
+ * lasting 2 hours (120 minutes) and containing 5 microtides of 24 minutes each.
+ */
 
 import SunCalc from 'suncalc';
 
+/**
+ * Array of Tattva definitions
+ * Each tattva represents an elemental energy with specific visual properties
+ * @constant {Array<Object>}
+ */
 export const TATTWAS = [
   {
     name: 'Akasha',
@@ -47,29 +63,67 @@ export const TATTWAS = [
   }
 ];
 
+/**
+ * Duration constants for tattva cycles
+ */
 // Duration of each macrotide (main tattva) in minutes
 const MACROTIDE_DURATION = 120; // 2 hours per macrotide
 const TOTAL_CYCLE_DURATION = MACROTIDE_DURATION * 5; // 600 minutes = 10 hours
 
-// Default location coordinates (can be customized)
-// Default to Montreal, Quebec, Canada coordinates
+/**
+ * Default location coordinates
+ * Falls back to Montreal, Quebec, Canada when geolocation is unavailable
+ */
 const DEFAULT_LATITUDE = 45.5017;
 const DEFAULT_LONGITUDE = -73.5673;
 
-// Get actual sunrise time based on geolocation
-// Falls back to default location if geolocation is not available
+/**
+ * Get actual sunrise time based on geolocation using SunCalc library
+ * Falls back to default location if coordinates are not provided
+ * 
+ * @param {Date} [date=new Date()] - Date for which to calculate sunrise
+ * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate
+ * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate
+ * @returns {Date} Sunrise time for the given date and location
+ */
 export const getSunriseTime = (date = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
   const times = SunCalc.getTimes(date, latitude, longitude);
   return times.sunrise;
 };
 
-// Get actual sunset time based on geolocation
+/**
+ * Get actual sunset time based on geolocation using SunCalc library
+ * 
+ * @param {Date} [date=new Date()] - Date for which to calculate sunset
+ * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate
+ * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate
+ * @returns {Date} Sunset time for the given date and location
+ */
 export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
   const times = SunCalc.getTimes(date, latitude, longitude);
   return times.sunset;
 };
 
-// Calculate which tattva is active at a given time
+/**
+ * Calculate which tattva is active at a given time
+ * 
+ * The calculation determines both the macrotide (2-hour period) and microtide
+ * (24-minute period within the macrotide). The cycle starts at sunrise and
+ * repeats every 10 hours.
+ * 
+ * @param {Date} [currentTime=new Date()] - Time for which to calculate tattva
+ * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate for sunrise calculation
+ * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate for sunrise calculation
+ * @returns {Object} Tattva data including macrotide, microtide, and remaining times
+ * @returns {Object} return.macrotide - Current macrotide tattva object
+ * @returns {Object} return.microtide - Current microtide tattva object
+ * @returns {number} return.macrotideRemainingSeconds - Seconds remaining in current macrotide
+ * @returns {number} return.microtideRemainingSeconds - Seconds remaining in current microtide
+ * @returns {number} return.macrotideRemainingMinutes - Minutes remaining in current macrotide (ceil)
+ * @returns {number} return.microtideRemainingMinutes - Minutes remaining in current microtide (ceil)
+ * @returns {number} return.cyclePosition - Position within the 10-hour cycle in minutes
+ * @returns {Date} return.sunrise - Sunrise time for the given date and location
+ */
 export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
   const sunrise = getSunriseTime(currentTime, latitude, longitude);
   
@@ -124,7 +178,13 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   };
 };
 
-// Get the next tattva in sequence
+/**
+ * Get the next tattva in the sequence
+ * Wraps around to the beginning after the last tattva
+ * 
+ * @param {number} currentIndex - Current tattva index (0-4)
+ * @returns {Object} Next tattva object in the sequence
+ */
 export const getNextTattva = (currentIndex) => {
   return TATTWAS[(currentIndex + 1) % TATTWAS.length];
 };

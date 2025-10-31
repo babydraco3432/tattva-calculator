@@ -1,69 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TattvaDisplay from './components/TattvaDisplay';
-import { calculateTattva } from './utils/tattvaCalculator';
+import { useGeolocation } from './hooks/useGeolocation';
+import { useTattvaUpdates } from './hooks/useTattvaUpdates';
+import { FONT_SIZES, COLORS, LAYOUT, FONTS } from './constants/styles';
 
+/**
+ * Main App component for the Tattva Calculator
+ * Manages time updates and geolocation for accurate sunrise calculations
+ */
 function App() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [tattvaData, setTattvaData] = useState(calculateTattva());
   const [scryingMode, setScryingMode] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
-
-  // Get user's geolocation on mount
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.log('Geolocation not available or denied, using default location (Montreal)');
-        }
-      );
-    }
-  }, []);
-
-  useEffect(() => {
-    // Update the time and tattva data every second
-    const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now);
-      // Pass user location if available
-      if (userLocation) {
-        setTattvaData(calculateTattva(now, userLocation.latitude, userLocation.longitude));
-      } else {
-        setTattvaData(calculateTattva(now));
-      }
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [userLocation]);
+  
+  // Custom hooks for geolocation and tattva updates
+  const { userLocation } = useGeolocation();
+  const { currentTime, tattvaData } = useTattvaUpdates(userLocation);
 
   const appStyle = {
     minHeight: '100vh',
-    backgroundColor: '#f0f2f5',
-    padding: '20px',
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    backgroundColor: COLORS.BACKGROUND_LIGHT,
+    padding: LAYOUT.PADDING_DEFAULT,
+    fontFamily: FONTS.SYSTEM,
   };
 
   const headerStyle = {
     textAlign: 'center',
-    marginBottom: '30px',
-    color: '#333',
+    marginBottom: LAYOUT.MARGIN_BOTTOM_LARGE,
+    color: COLORS.PRIMARY_TEXT,
   };
 
   const titleStyle = {
-    fontSize: '36px',
+    fontSize: FONT_SIZES.TITLE_LARGE,
     fontWeight: 'bold',
-    margin: '0 0 10px 0',
-    color: '#2c3e50',
+    margin: `0 0 ${LAYOUT.MARGIN_BOTTOM_SMALL} 0`,
+    color: COLORS.HEADING,
   };
 
   const subtitleStyle = {
-    fontSize: '18px',
-    color: '#7f8c8d',
+    fontSize: FONT_SIZES.SUBTITLE,
+    color: COLORS.SECONDARY_TEXT,
     margin: '0',
   };
 
