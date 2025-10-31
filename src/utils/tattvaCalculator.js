@@ -16,7 +16,7 @@ export const TATTWAS = [
   {
     name: 'Vayu',
     element: 'Air',
-    backgroundColor: '#0066FF', // Blue background
+    backgroundColor: '#FF8C00', // Orange background
     shapeColor: '#0066FF', // Blue circle
     shape: 'circle',
     description: 'Air element'

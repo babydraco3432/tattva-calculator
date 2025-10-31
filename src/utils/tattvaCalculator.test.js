@@ -32,6 +32,15 @@ describe('Tattva Calculator', () => {
         expect(tattva).toHaveProperty('description');
       });
     });
+
+    test('Vayu should have blue circle on orange background', () => {
+      const vayu = TATTWAS.find(t => t.name === 'Vayu');
+      expect(vayu.backgroundColor).toBe('#FF8C00'); // Orange background
+      expect(vayu.shapeColor).toBe('#0066FF'); // Blue circle
+      expect(vayu.shape).toBe('circle');
+      // Ensure background and shape colors are different (circle should be visible)
+      expect(vayu.backgroundColor).not.toBe(vayu.shapeColor);
+    });
   });
 
   describe('getSunriseTime', () => {
