@@ -6,10 +6,10 @@ A React application for calculating and displaying the current Tattva (elemental
 
 Tattwas are the five fundamental elements in Hindu and yogic philosophy:
 
-1. **Akasha** (Ether/Space) - Represented by an indigo oval on a black background
+1. **Akasha** (Ether/Space) - Represented by a purple/violet oval on a black background
 2. **Vayu** (Air) - Represented by a blue circle on an orange background
 3. **Tejas** (Fire) - Represented by a red triangle on a red background
-4. **Apas** (Water) - Represented by a silver crescent on a silver background
+4. **Apas** (Water) - Represented by a white crescent on a silver background
 5. **Prithvi** (Earth) - Represented by a yellow square on a purple background
 
 ## How It Works
