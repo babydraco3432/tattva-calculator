@@ -41,6 +41,15 @@ describe('Tattva Calculator', () => {
       // Ensure background and shape colors are different (circle should be visible)
       expect(vayu.backgroundColor).not.toBe(vayu.shapeColor);
     });
+
+    test('Tejas should have green triangle on red background', () => {
+      const tejas = TATTWAS.find(t => t.name === 'Tejas');
+      expect(tejas.backgroundColor).toBe('#FF0000'); // Red background
+      expect(tejas.shapeColor).toBe('#00FF00'); // Green triangle
+      expect(tejas.shape).toBe('triangle');
+      // Ensure background and shape colors are different (triangle should be visible)
+      expect(tejas.backgroundColor).not.toBe(tejas.shapeColor);
+    });
   });
 
   describe('getSunriseTime', () => {
@@ -89,75 +98,75 @@ describe('Tattva Calculator', () => {
       expect(result.microtide.name).toBe('Akasha');
     });
 
-    test('at 6:24 AM, should be Vayu macrotide', () => {
-      const testTime = new Date(2024, 0, 1, 6, 24, 0, 0);
+    test('at 8:00 AM, should be Vayu macrotide', () => {
+      const testTime = new Date(2024, 0, 1, 8, 0, 0, 0);
       const result = calculateTattva(testTime);
       expect(result.macrotide.name).toBe('Vayu');
     });
 
-    test('at 6:48 AM, should be Tejas macrotide', () => {
-      const testTime = new Date(2024, 0, 1, 6, 48, 0, 0);
+    test('at 10:00 AM, should be Tejas macrotide', () => {
+      const testTime = new Date(2024, 0, 1, 10, 0, 0, 0);
       const result = calculateTattva(testTime);
       expect(result.macrotide.name).toBe('Tejas');
     });
 
-    test('at 7:12 AM, should be Apas macrotide', () => {
-      const testTime = new Date(2024, 0, 1, 7, 12, 0, 0);
+    test('at 12:00 PM, should be Apas macrotide', () => {
+      const testTime = new Date(2024, 0, 1, 12, 0, 0, 0);
       const result = calculateTattva(testTime);
       expect(result.macrotide.name).toBe('Apas');
     });
 
-    test('at 7:36 AM, should be Prithvi macrotide', () => {
-      const testTime = new Date(2024, 0, 1, 7, 36, 0, 0);
+    test('at 2:00 PM, should be Prithvi macrotide', () => {
+      const testTime = new Date(2024, 0, 1, 14, 0, 0, 0);
       const result = calculateTattva(testTime);
       expect(result.macrotide.name).toBe('Prithvi');
     });
 
-    test('at 8:00 AM, cycle should repeat - back to Akasha', () => {
-      const testTime = new Date(2024, 0, 1, 8, 0, 0, 0);
+    test('at 4:00 PM, cycle should repeat - back to Akasha', () => {
+      const testTime = new Date(2024, 0, 1, 16, 0, 0, 0);
       const result = calculateTattva(testTime);
       expect(result.macrotide.name).toBe('Akasha');
     });
 
-    test('macrotide remaining time should be between 1 and 24 minutes', () => {
+    test('macrotide remaining time should be between 1 and 120 minutes', () => {
       const result = calculateTattva();
       expect(result.macrotideRemainingMinutes).toBeGreaterThan(0);
-      expect(result.macrotideRemainingMinutes).toBeLessThanOrEqual(24);
+      expect(result.macrotideRemainingMinutes).toBeLessThanOrEqual(120);
     });
 
-    test('microtide remaining time should be between 0 and 5 minutes', () => {
+    test('microtide remaining time should be between 0 and 24 minutes', () => {
       const result = calculateTattva();
       expect(result.microtideRemainingMinutes).toBeGreaterThan(0);
-      expect(result.microtideRemainingMinutes).toBeLessThanOrEqual(5);
+      expect(result.microtideRemainingMinutes).toBeLessThanOrEqual(24);
     });
 
     test('macrotide remaining seconds should be calculated correctly', () => {
-      const testTime = new Date(2024, 0, 1, 6, 1, 30, 0); // 1:30 into Akasha
+      const testTime = new Date(2024, 0, 1, 6, 10, 30, 0); // 10:30 into Akasha macrotide
       const result = calculateTattva(testTime);
-      // Should have 22:30 remaining (24 minutes - 1:30)
-      expect(result.macrotideRemainingSeconds).toBe(22 * 60 + 30);
+      // Should have 1:49:30 remaining (120 minutes - 10:30 = 109:30)
+      expect(result.macrotideRemainingSeconds).toBe(109 * 60 + 30);
     });
 
     test('microtide remaining seconds should be calculated correctly', () => {
-      const testTime = new Date(2024, 0, 1, 6, 1, 30, 0); // 1:30 into first microtide
+      const testTime = new Date(2024, 0, 1, 6, 10, 30, 0); // 10:30 into first microtide
       const result = calculateTattva(testTime);
-      // Each microtide is 4.8 minutes = 288 seconds
-      // After 1:30 (90 seconds), should have 198 seconds remaining
-      expect(result.microtideRemainingSeconds).toBe(288 - 90);
+      // Each microtide is 24 minutes = 1440 seconds
+      // After 10:30 (630 seconds), should have 810 seconds remaining
+      expect(result.microtideRemainingSeconds).toBe(1440 - 630);
     });
 
-    test('microtide should change every ~4.8 minutes', () => {
+    test('microtide should change every 24 minutes', () => {
       const baseTime = new Date(2024, 0, 1, 6, 0, 0, 0);
       
       const time1 = new Date(baseTime);
       const time2 = new Date(baseTime);
-      time2.setMinutes(baseTime.getMinutes() + 5);
+      time2.setMinutes(baseTime.getMinutes() + 24); // Move 24 minutes forward
 
       const result1 = calculateTattva(time1);
       const result2 = calculateTattva(time2);
 
       expect(result1.microtide.name).toBe('Akasha');
-      expect(result2.microtide.name).toBe('Vayu');
+      expect(result2.microtide.name).toBe('Vayu'); // Should be next tattva after 24 minutes
     });
   });
 });

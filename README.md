@@ -8,7 +8,7 @@ Tattwas are the five fundamental elements in Hindu and yogic philosophy:
 
 1. **Akasha** (Ether/Space) - Represented by a purple/violet oval on a black background
 2. **Vayu** (Air) - Represented by a blue circle on an orange background
-3. **Tejas** (Fire) - Represented by a red triangle on a red background
+3. **Tejas** (Fire) - Represented by a green triangle on a red background
 4. **Apas** (Water) - Represented by a white crescent on a silver background
 5. **Prithvi** (Earth) - Represented by a yellow square on a purple background
 
@@ -16,10 +16,10 @@ Tattwas are the five fundamental elements in Hindu and yogic philosophy:
 
 The application calculates two levels of tattva influence:
 
-- **Macrotide**: The primary tattva influencing a 24-minute period
-- **Microtide**: The secondary tattva within each macrotide, lasting approximately 4.8 minutes
+- **Macrotide**: The primary tattva influencing a 2-hour period
+- **Microtide**: The secondary tattva within each macrotide, lasting 24 minutes
 
-The complete tattva cycle repeats every 2 hours (120 minutes), starting from sunrise (default: 6:00 AM).
+The complete tattva cycle repeats every 10 hours (600 minutes), starting from sunrise (default: 6:00 AM).
 
 ## Features
 
