@@ -79,7 +79,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         );
 
       case 'crescent':
-        // Crescent - properly centered using SVG for better control
+        // Crescent - wide horizontal cup shape using ellipse mask
         return (
           <svg
             width={size}
@@ -93,10 +93,13 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
             }}
             title={name}
           >
-            <path
-              d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
-              fill={shapeColor}
-            />
+            <defs>
+              <mask id={`crescentMask-${name}`}>
+                <rect width="100" height="100" fill="white"/>
+                <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
+              </mask>
+            </defs>
+            <ellipse cx="50" cy="51" rx="48" ry="32" fill={shapeColor} mask={`url(#crescentMask-${name})`}/>
           </svg>
         );
 
@@ -125,7 +128,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     // Only render if microtide is different from macrotide
     if (!showMicrotide) return null;
 
-    const microtideSize = size * 0.4; // Smaller size for nested microtide
+    const microtideSize = size * 0.22; // Smaller size for nested microtide (no crescent overlap)
     const { shape: microShape, name: microName } = microtide;
 
     // Subelements should use standard colors based on their element type
@@ -160,7 +163,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
       }
       if (shape === 'crescent') {
         return {
-          top: '68%', // Move down to bottom center of crescent cup
+          top: '61%', // Move down to bottom center of crescent cup
           left: '50%',
         };
       }
@@ -228,7 +231,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         );
 
       case 'crescent':
-        // Crescent - centered inside macrotide using SVG
+        // Crescent - wide horizontal cup shape inside macrotide using ellipse mask
         return (
           <svg
             width={microtideSize}
@@ -242,10 +245,13 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               zIndex: 10,
             }}
           >
-            <path
-              d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
-              fill={microColor}
-            />
+            <defs>
+              <mask id={`crescentMask-${microName}-micro`}>
+                <rect width="100" height="100" fill="white"/>
+                <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
+              </mask>
+            </defs>
+            <ellipse cx="50" cy="51" rx="48" ry="32" fill={microColor} mask={`url(#crescentMask-${microName}-micro)`}/>
           </svg>
         );
 
