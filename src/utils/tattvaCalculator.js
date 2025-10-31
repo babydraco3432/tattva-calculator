@@ -107,14 +107,18 @@ export const calculateTattva = (currentTime = new Date()) => {
   const macrotideRemainingSeconds = (TATTVA_DURATION * 60) - positionInMacrotideSeconds;
   const microtideRemainingSeconds = (microtideDuration * 60) - (positionInMacrotideSeconds % (microtideDuration * 60));
   
+  // Handle edge case: if remaining time is 0, set to full duration
+  const safeMacrotideRemaining = macrotideRemainingSeconds === 0 ? (TATTVA_DURATION * 60) : macrotideRemainingSeconds;
+  const safeMicrotideRemaining = microtideRemainingSeconds === 0 ? (microtideDuration * 60) : microtideRemainingSeconds;
+  
   return {
     macrotide,
     microtide,
-    macrotideRemainingSeconds,
-    microtideRemainingSeconds,
+    macrotideRemainingSeconds: safeMacrotideRemaining,
+    microtideRemainingSeconds: safeMicrotideRemaining,
     // Keep these for backward compatibility with tests
-    macrotideRemainingMinutes: Math.ceil(macrotideRemainingSeconds / 60),
-    microtideRemainingMinutes: Math.ceil(microtideRemainingSeconds / 60),
+    macrotideRemainingMinutes: Math.ceil(safeMacrotideRemaining / 60),
+    microtideRemainingMinutes: Math.ceil(safeMicrotideRemaining / 60),
     cyclePosition,
     sunrise
   };
