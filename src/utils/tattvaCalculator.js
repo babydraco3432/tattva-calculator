@@ -25,7 +25,7 @@ export const TATTWAS = [
     name: 'Tejas',
     element: 'Fire',
     backgroundColor: '#FF0000', // Red background
-    shapeColor: '#FF0000', // Red triangle
+    shapeColor: '#00FF00', // Green triangle (visible on red background)
     shape: 'triangle',
     description: 'Fire element'
   },
@@ -47,9 +47,9 @@ export const TATTWAS = [
   }
 ];
 
-// Duration of each tattva in minutes
-const TATTVA_DURATION = 24;
-const TOTAL_CYCLE_DURATION = TATTVA_DURATION * 5; // 120 minutes = 2 hours
+// Duration of each macrotide (main tattva) in minutes
+const MACROTIDE_DURATION = 120; // 2 hours per macrotide
+const TOTAL_CYCLE_DURATION = MACROTIDE_DURATION * 5; // 600 minutes = 10 hours
 
 // Default location coordinates (can be customized)
 // Default to Montreal, Quebec, Canada coordinates
@@ -92,24 +92,24 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   const cyclePositionSeconds = adjustedSeconds % (TOTAL_CYCLE_DURATION * 60);
   
   // Calculate macrotide (main tattva)
-  const macrotideIndex = Math.floor(cyclePosition / TATTVA_DURATION);
+  const macrotideIndex = Math.floor(cyclePosition / MACROTIDE_DURATION);
   const macrotide = TATTWAS[macrotideIndex];
   
   // Calculate microtide (sub-tattva within the macrotide)
-  // Each microtide lasts 1/5 of the macrotide duration (4.8 minutes)
-  const microtideDuration = TATTVA_DURATION / 5;
-  const positionInMacrotide = cyclePosition % TATTVA_DURATION;
-  const positionInMacrotideSeconds = cyclePositionSeconds % (TATTVA_DURATION * 60);
-  const microtideIndex = Math.floor(positionInMacrotide / microtideDuration);
+  // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
+  const MICROTIDE_DURATION = MACROTIDE_DURATION / 5;
+  const positionInMacrotide = cyclePosition % MACROTIDE_DURATION;
+  const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
+  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
   const microtide = TATTWAS[microtideIndex];
   
   // Calculate remaining time for current macrotide and microtide in seconds
-  const macrotideRemainingSeconds = (TATTVA_DURATION * 60) - positionInMacrotideSeconds;
-  const microtideRemainingSeconds = (microtideDuration * 60) - (positionInMacrotideSeconds % (microtideDuration * 60));
+  const macrotideRemainingSeconds = (MACROTIDE_DURATION * 60) - positionInMacrotideSeconds;
+  const microtideRemainingSeconds = (MICROTIDE_DURATION * 60) - (positionInMacrotideSeconds % (MICROTIDE_DURATION * 60));
   
   // Handle edge case: if remaining time is 0, set to full duration
-  const safeMacrotideRemaining = macrotideRemainingSeconds === 0 ? (TATTVA_DURATION * 60) : macrotideRemainingSeconds;
-  const safeMicrotideRemaining = microtideRemainingSeconds === 0 ? (microtideDuration * 60) : microtideRemainingSeconds;
+  const safeMacrotideRemaining = macrotideRemainingSeconds === 0 ? (MACROTIDE_DURATION * 60) : macrotideRemainingSeconds;
+  const safeMicrotideRemaining = microtideRemainingSeconds === 0 ? (MICROTIDE_DURATION * 60) : microtideRemainingSeconds;
   
   return {
     macrotide,
