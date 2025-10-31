@@ -104,7 +104,12 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
           <div 
             style={cardStyle}
             onClick={() => setScryingMode(true)}
-            onKeyDown={(e) => e.key === 'Enter' && setScryingMode(true)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                setScryingMode(true);
+              }
+            }}
             role="button"
             tabIndex={0}
             aria-label="Enter scrying mode"
@@ -144,7 +149,12 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
         <div 
           style={scryingOverlayStyle}
           onClick={() => setScryingMode(false)}
-          onKeyDown={(e) => e.key === 'Escape' && setScryingMode(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              setScryingMode(false);
+            }
+          }}
           role="dialog"
           aria-label="Scrying mode - Press escape or click to exit"
           tabIndex={0}

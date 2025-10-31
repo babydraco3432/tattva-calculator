@@ -150,7 +150,7 @@ SquareShape.defaultProps = {
  */
 export const CrescentShape = React.memo(({ size, color, isMicrotide, position, uniqueId }) => {
   // Ensure unique mask ID with fallback
-  const maskId = `crescentMask-${uniqueId || Math.random().toString(36).substr(2, 9)}`;
+  const maskId = `crescentMask-${uniqueId || Math.random().toString(36).substring(2, 11)}`;
 
   const style = {
     position: 'absolute',

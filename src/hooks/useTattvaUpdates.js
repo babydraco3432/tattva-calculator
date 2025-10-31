@@ -18,6 +18,8 @@ export const useTattvaUpdates = (userLocation) => {
   }, [userLocation]);
 
   useEffect(() => {
+    // Set up timer that updates every second
+    // Timer persists for the lifetime of the component
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
@@ -32,7 +34,7 @@ export const useTattvaUpdates = (userLocation) => {
     }, DURATIONS.UPDATE_INTERVAL_MS);
 
     return () => clearInterval(timer);
-  }, []); // Empty dependency array - timer runs once
+  }, []); // Effect runs once on mount, timer updates continuously
 
   return { currentTime, tattvaData };
 };
