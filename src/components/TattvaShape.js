@@ -1,6 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { renderShape } from './shapes/shapeFactory';
+import { getSubelementColor, getPositionOffset } from '../utils/shapeHelpers';
+import { SIZES, EFFECTS } from '../constants/styles';
 
-const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => {
+const TattvaShape = ({ tattva, microtide, size = SIZES.TATTVA_SHAPE_SMALL, scryingMode = false }) => {
   const { shape, backgroundColor, shapeColor, name } = tattva;
 
   // Check if microtide is different from macrotide
@@ -11,277 +15,68 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: size * 1.5,
-    height: size * 1.5,
+    width: size * SIZES.CONTAINER_RATIO,
+    height: size * SIZES.CONTAINER_RATIO,
     backgroundColor: backgroundColor,
-    borderRadius: '10px',
-    border: scryingMode ? '4px solid #fff' : '3px solid #333',
+    borderRadius: EFFECTS.BORDER_RADIUS,
+    border: scryingMode 
+      ? `${EFFECTS.BORDER_WIDTH_SCRYING} solid ${EFFECTS.BORDER_COLOR_SCRYING}` 
+      : `${EFFECTS.BORDER_WIDTH_DEFAULT} solid ${EFFECTS.BORDER_COLOR}`,
     boxShadow: scryingMode 
-      ? '0 0 50px rgba(255,255,255,0.5)' 
-      : '0 4px 8px rgba(0,0,0,0.3)',
+      ? EFFECTS.BOX_SHADOW_SCRYING
+      : EFFECTS.BOX_SHADOW_DEFAULT,
     position: 'relative',
-  };
-
-  const renderMacrotideShape = () => {
-    switch (shape) {
-      case 'oval':
-        // Egg/oval shape - properly centered
-        return (
-          <div
-            style={{
-              width: size * 0.75,
-              height: size,
-              backgroundColor: shapeColor,
-              borderRadius: '50%',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            title={name}
-          />
-        );
-
-      case 'circle':
-        return (
-          <div
-            style={{
-              width: size,
-              height: size,
-              backgroundColor: shapeColor,
-              borderRadius: '50%',
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            title={name}
-          />
-        );
-
-      case 'triangle':
-        // Triangle - properly centered
-        return (
-          <div
-            style={{
-              width: 0,
-              height: 0,
-              borderLeft: `${size / 2}px solid transparent`,
-              borderRight: `${size / 2}px solid transparent`,
-              borderBottom: `${size}px solid ${shapeColor}`,
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            title={name}
-          />
-        );
-
-      case 'crescent':
-        // Crescent - wide horizontal cup shape using ellipse mask
-        return (
-          <svg
-            width={size}
-            height={size}
-            viewBox="0 0 100 100"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            title={name}
-          >
-            <defs>
-              <mask id={`crescentMask-${name}`}>
-                <rect width="100" height="100" fill="white"/>
-                <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
-              </mask>
-            </defs>
-            <ellipse cx="50" cy="51" rx="48" ry="32" fill={shapeColor} mask={`url(#crescentMask-${name})`}/>
-          </svg>
-        );
-
-      case 'square':
-        return (
-          <div
-            style={{
-              width: size,
-              height: size,
-              backgroundColor: shapeColor,
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-            }}
-            title={name}
-          />
-        );
-
-      default:
-        return null;
-    }
   };
 
   const renderMicrotideShape = () => {
     // Only render if microtide is different from macrotide
     if (!showMicrotide) return null;
 
-    const microtideSize = size * 0.22; // Smaller size for nested microtide (no crescent overlap)
+    const microtideSize = size * SIZES.MICROTIDE_RATIO;
     const { shape: microShape, name: microName } = microtide;
-
-    // Subelements should use standard colors based on their element type
-    const getSubelementColor = (elementName) => {
-      switch (elementName) {
-        case 'Prithvi':
-          return '#FFFF00'; // Yellow
-        case 'Vayu':
-          return '#0066FF'; // Blue
-        case 'Tejas':
-          return '#FF0000'; // Red
-        case 'Apas':
-          return '#C0C0C0'; // Silver
-        case 'Akasha':
-          return '#000000'; // Black
-        default:
-          return '#FFFFFF'; // Fallback white
-      }
-    };
-
     const microColor = getSubelementColor(microName);
+    const position = getPositionOffset(shape);
 
-    // Adjust positioning based on macrotide shape
-    // Triangles have their visual center lower, so we need to offset subelements down
-    // Crescents need subelements at the bottom center of the crescent cup
-    const getPositionOffset = () => {
-      if (shape === 'triangle') {
-        return {
-          top: '62%', // Move down from 50% to better center in triangle's visual center
-          left: '50%',
-        };
-      }
-      if (shape === 'crescent') {
-        return {
-          top: '61%', // Move down to bottom center of crescent cup
-          left: '50%',
-        };
-      }
-      return {
-        top: '50%',
-        left: '50%',
-      };
-    };
-
-    const position = getPositionOffset();
-
-    // Render microtide shape directly centered within the macrotide shape
-    switch (microShape) {
-      case 'oval':
-        // Egg/oval shape - centered inside macrotide
-        return (
-          <div
-            style={{
-              width: microtideSize * 0.75,
-              height: microtideSize,
-              backgroundColor: microColor,
-              borderRadius: '50%',
-              position: 'absolute',
-              top: position.top,
-              left: position.left,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-            }}
-          />
-        );
-
-      case 'circle':
-        return (
-          <div
-            style={{
-              width: microtideSize,
-              height: microtideSize,
-              backgroundColor: microColor,
-              borderRadius: '50%',
-              position: 'absolute',
-              top: position.top,
-              left: position.left,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-            }}
-          />
-        );
-
-      case 'triangle':
-        return (
-          <div
-            style={{
-              width: 0,
-              height: 0,
-              borderLeft: `${microtideSize / 2}px solid transparent`,
-              borderRight: `${microtideSize / 2}px solid transparent`,
-              borderBottom: `${microtideSize}px solid ${microColor}`,
-              position: 'absolute',
-              top: position.top,
-              left: position.left,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-            }}
-          />
-        );
-
-      case 'crescent':
-        // Crescent - wide horizontal cup shape inside macrotide using ellipse mask
-        return (
-          <svg
-            width={microtideSize}
-            height={microtideSize}
-            viewBox="0 0 100 100"
-            style={{
-              position: 'absolute',
-              top: position.top,
-              left: position.left,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-            }}
-          >
-            <defs>
-              <mask id={`crescentMask-${microName}-micro`}>
-                <rect width="100" height="100" fill="white"/>
-                <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
-              </mask>
-            </defs>
-            <ellipse cx="50" cy="51" rx="48" ry="32" fill={microColor} mask={`url(#crescentMask-${microName}-micro)`}/>
-          </svg>
-        );
-
-      case 'square':
-        return (
-          <div
-            style={{
-              width: microtideSize,
-              height: microtideSize,
-              backgroundColor: microColor,
-              position: 'absolute',
-              top: position.top,
-              left: position.left,
-              transform: 'translate(-50%, -50%)',
-              zIndex: 10,
-            }}
-          />
-        );
-
-      default:
-        return null;
-    }
+    return renderShape(
+      microShape,
+      microtideSize,
+      microColor,
+      true, // isMicrotide
+      position,
+      `${microName}-micro`
+    );
   };
 
   return (
     <div style={containerStyle}>
-      {renderMacrotideShape()}
+      {renderShape(shape, size, shapeColor, false, null, name)}
       {renderMicrotideShape()}
     </div>
   );
+};
+
+TattvaShape.propTypes = {
+  tattva: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    element: PropTypes.string.isRequired,
+    backgroundColor: PropTypes.string.isRequired,
+    shapeColor: PropTypes.string.isRequired,
+    shape: PropTypes.oneOf(['oval', 'circle', 'triangle', 'square', 'crescent']).isRequired,
+    description: PropTypes.string,
+  }).isRequired,
+  microtide: PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    element: PropTypes.string.isRequired,
+    shape: PropTypes.oneOf(['oval', 'circle', 'triangle', 'square', 'crescent']).isRequired,
+  }),
+  size: PropTypes.number,
+  scryingMode: PropTypes.bool,
+};
+
+TattvaShape.defaultProps = {
+  microtide: null,
+  size: SIZES.TATTVA_SHAPE_SMALL,
+  scryingMode: false,
 };
 
 export default TattvaShape;

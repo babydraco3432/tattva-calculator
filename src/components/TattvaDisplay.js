@@ -1,60 +1,47 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TattvaShape from './TattvaShape';
+import { formatTime, formatMacrotideRemaining, formatMicrotideRemaining } from '../utils/timeFormatter';
+import {
+  SIZES,
+  FONT_SIZES,
+  COLORS,
+  LAYOUT,
+  ANIMATIONS,
+  Z_INDEX
+} from '../constants/styles';
 
 const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode }) => {
   const { macrotide, microtide, macrotideRemainingSeconds, microtideRemainingSeconds, sunrise } = tattvaData;
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { 
-      hour: '2-digit', 
-      minute: '2-digit',
-      second: '2-digit'
-    });
-  };
-
-  // Format time remaining for macrotide as HH:MM:SS
-  const formatMacrotideRemaining = (totalSeconds) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
-
-  // Format time remaining for microtide as MM:SS
-  const formatMicrotideRemaining = (totalSeconds) => {
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
 
   const containerStyle = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: '20px',
+    padding: LAYOUT.PADDING_DEFAULT,
     fontFamily: 'Arial, sans-serif',
-    maxWidth: '600px',
+    maxWidth: LAYOUT.MAX_WIDTH_CONTAINER,
     margin: '0 auto',
   };
 
   const timeDisplayStyle = {
-    fontSize: '24px',
-    marginBottom: '10px',
+    fontSize: FONT_SIZES.TIME_DISPLAY,
+    marginBottom: LAYOUT.MARGIN_BOTTOM_SMALL,
     fontWeight: 'bold',
-    color: '#333',
+    color: COLORS.PRIMARY_TEXT,
   };
 
   const sunriseStyle = {
-    fontSize: '14px',
-    color: '#666',
-    marginBottom: '30px',
+    fontSize: FONT_SIZES.SMALL,
+    color: COLORS.SUBTLE_TEXT,
+    marginBottom: LAYOUT.MARGIN_BOTTOM_LARGE,
   };
 
   // Single card - just the visual, clickable
   const cardStyle = {
     cursor: 'pointer',
-    transition: 'transform 0.3s ease',
-    marginBottom: '20px',
+    transition: ANIMATIONS.TRANSITION_DEFAULT,
+    marginBottom: LAYOUT.PADDING_DEFAULT,
   };
 
   // Scrying mode overlay
@@ -68,7 +55,7 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 1000,
+    zIndex: Z_INDEX.SCRYING_OVERLAY,
     cursor: 'pointer',
   };
 
@@ -76,27 +63,27 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
   const infoSectionStyle = {
     textAlign: 'center',
     width: '100%',
-    maxWidth: '500px',
+    maxWidth: LAYOUT.MAX_WIDTH_INFO,
   };
 
   const titleStyle = {
-    fontSize: '28px',
+    fontSize: FONT_SIZES.TITLE_MEDIUM,
     fontWeight: 'bold',
-    marginBottom: '15px',
-    color: '#222',
+    marginBottom: LAYOUT.MARGIN_BOTTOM_MEDIUM,
+    color: COLORS.DARK_HEADING,
   };
 
   const detailStyle = {
-    fontSize: '16px',
+    fontSize: FONT_SIZES.DETAIL,
     margin: '10px 0',
-    color: '#444',
+    color: COLORS.DETAIL_TEXT,
     lineHeight: '1.6',
   };
 
   const timeRemainingStyle = {
-    fontSize: '18px',
+    fontSize: FONT_SIZES.SUBTITLE,
     fontWeight: 'bold',
-    color: '#FF1744',
+    color: COLORS.DANGER,
     marginTop: '5px',
   };
 
@@ -105,11 +92,11 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
       {/* Hide normal view when in scrying mode */}
       {!scryingMode && (
         <div style={containerStyle}>
-          <div style={timeDisplayStyle}>
+          <div style={timeDisplayStyle} role="timer" aria-live="polite">
             Current Time: {formatTime(currentTime)}
           </div>
           
-          <div style={sunriseStyle}>
+          <div style={sunriseStyle} aria-label="Sunrise time">
             Sunrise: {formatTime(sunrise)}
           </div>
 
@@ -117,11 +104,15 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
           <div 
             style={cardStyle}
             onClick={() => setScryingMode(true)}
+            onKeyPress={(e) => e.key === 'Enter' && setScryingMode(true)}
+            role="button"
+            tabIndex={0}
+            aria-label="Enter scrying mode"
           >
             <TattvaShape 
               tattva={macrotide} 
               microtide={microtide}
-              size={200} 
+              size={SIZES.TATTVA_SHAPE_NORMAL} 
             />
           </div>
 
@@ -133,14 +124,14 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
             
             <div style={detailStyle}>
               <strong>Current Macrotide:</strong> {macrotide.name} ({macrotide.element})
-              <div style={timeRemainingStyle}>
+              <div style={timeRemainingStyle} aria-live="polite">
                 {formatMacrotideRemaining(macrotideRemainingSeconds)} remaining
               </div>
             </div>
 
             <div style={detailStyle}>
               <strong>Current Microtide:</strong> {microtide.name} ({microtide.element})
-              <div style={timeRemainingStyle}>
+              <div style={timeRemainingStyle} aria-live="polite">
                 {formatMicrotideRemaining(microtideRemainingSeconds)} remaining
               </div>
             </div>
@@ -153,17 +144,34 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
         <div 
           style={scryingOverlayStyle}
           onClick={() => setScryingMode(false)}
+          onKeyPress={(e) => e.key === 'Escape' && setScryingMode(false)}
+          role="dialog"
+          aria-label="Scrying mode - Press escape or click to exit"
+          tabIndex={0}
         >
           <TattvaShape 
             tattva={macrotide} 
             microtide={microtide}
-            size={400} 
+            size={SIZES.TATTVA_SHAPE_LARGE} 
             scryingMode={true}
           />
         </div>
       )}
     </>
   );
+};
+
+TattvaDisplay.propTypes = {
+  tattvaData: PropTypes.shape({
+    macrotide: PropTypes.object.isRequired,
+    microtide: PropTypes.object.isRequired,
+    macrotideRemainingSeconds: PropTypes.number.isRequired,
+    microtideRemainingSeconds: PropTypes.number.isRequired,
+    sunrise: PropTypes.instanceOf(Date).isRequired,
+  }).isRequired,
+  currentTime: PropTypes.instanceOf(Date).isRequired,
+  scryingMode: PropTypes.bool.isRequired,
+  setScryingMode: PropTypes.func.isRequired,
 };
 
 export default TattvaDisplay;
