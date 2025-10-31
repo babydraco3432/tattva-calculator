@@ -7,39 +7,39 @@ export const TATTWAS = [
     name: 'Akasha',
     element: 'Ether',
     backgroundColor: '#000000', // Black background
-    shapeColor: '#9400D3', // Vivid violet for oval
+    shapeColor: '#9400D3', // Purple/violet oval (visible against black)
     shape: 'oval',
     description: 'Space/Ether element'
   },
   {
     name: 'Vayu',
     element: 'Air',
-    backgroundColor: '#FF6600', // Bright orange background
-    shapeColor: '#0066FF', // Bright blue for circle
+    backgroundColor: '#0066FF', // Blue background
+    shapeColor: '#0066FF', // Blue circle
     shape: 'circle',
     description: 'Air element'
   },
   {
     name: 'Tejas',
     element: 'Fire',
-    backgroundColor: '#FFFF00', // Bright yellow background
-    shapeColor: '#FF0000', // Bright red triangle
+    backgroundColor: '#FF0000', // Red background
+    shapeColor: '#FF0000', // Red triangle
     shape: 'triangle',
     description: 'Fire element'
   },
   {
     name: 'Apas',
     element: 'Water',
-    backgroundColor: '#000000', // Black background
-    shapeColor: '#FFFFFF', // White crescent
+    backgroundColor: '#C0C0C0', // Silver background
+    shapeColor: '#FFFFFF', // White crescent (visible against silver)
     shape: 'crescent',
     description: 'Water element'
   },
   {
     name: 'Prithvi',
     element: 'Earth',
-    backgroundColor: '#00AA00', // Vivid green background
-    shapeColor: '#FFFF00', // Bright yellow square
+    backgroundColor: '#FFFF00', // Yellow background
+    shapeColor: '#FFFF00', // Yellow square
     shape: 'square',
     description: 'Earth element'
   }
