@@ -99,7 +99,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
                 <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
               </mask>
             </defs>
-            <ellipse cx="50" cy="55" rx="48" ry="40" fill={shapeColor} mask={`url(#crescentMask-${name})`}/>
+            <ellipse cx="50" cy="51" rx="48" ry="32" fill={shapeColor} mask={`url(#crescentMask-${name})`}/>
           </svg>
         );
 
@@ -128,7 +128,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     // Only render if microtide is different from macrotide
     if (!showMicrotide) return null;
 
-    const microtideSize = size * 0.4; // Smaller size for nested microtide
+    const microtideSize = size * 0.32; // Smaller size for nested microtide
     const { shape: microShape, name: microName } = microtide;
 
     // Subelements should use standard colors based on their element type
@@ -163,7 +163,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
       }
       if (shape === 'crescent') {
         return {
-          top: '68%', // Move down to bottom center of crescent cup
+          top: '61%', // Move down to bottom center of crescent cup
           left: '50%',
         };
       }
@@ -251,7 +251,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
                 <ellipse cx="50" cy="20" rx="43" ry="30" fill="black"/>
               </mask>
             </defs>
-            <ellipse cx="50" cy="55" rx="48" ry="40" fill={microColor} mask={`url(#crescentMask-${microName}-micro)`}/>
+            <ellipse cx="50" cy="51" rx="48" ry="32" fill={microColor} mask={`url(#crescentMask-${microName}-micro)`}/>
           </svg>
         );
 
