@@ -126,7 +126,44 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     if (!showMicrotide) return null;
 
     const microtideSize = size * 0.4; // Smaller size for nested microtide
-    const { shape: microShape, shapeColor: microColor } = microtide;
+    const { shape: microShape, name: microName } = microtide;
+
+    // Subelements should use standard colors based on their element type
+    const getSubelementColor = (elementName) => {
+      switch (elementName) {
+        case 'Prithvi':
+          return '#FFFF00'; // Yellow
+        case 'Vayu':
+          return '#0066FF'; // Blue
+        case 'Tejas':
+          return '#FF0000'; // Red
+        case 'Apas':
+          return '#C0C0C0'; // Silver
+        case 'Akasha':
+          return '#000000'; // Black
+        default:
+          return '#FFFFFF'; // Fallback white
+      }
+    };
+
+    const microColor = getSubelementColor(microName);
+
+    // Adjust positioning based on macrotide shape
+    // Triangles have their visual center lower, so we need to offset subelements down
+    const getPositionOffset = () => {
+      if (shape === 'triangle') {
+        return {
+          top: '62%', // Move down from 50% to better center in triangle's visual center
+          left: '50%',
+        };
+      }
+      return {
+        top: '50%',
+        left: '50%',
+      };
+    };
+
+    const position = getPositionOffset();
 
     // Render microtide shape directly centered within the macrotide shape
     switch (microShape) {
@@ -140,8 +177,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               backgroundColor: microColor,
               borderRadius: '50%',
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              top: position.top,
+              left: position.left,
               transform: 'translate(-50%, -50%)',
               zIndex: 10,
             }}
@@ -157,8 +194,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               backgroundColor: microColor,
               borderRadius: '50%',
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              top: position.top,
+              left: position.left,
               transform: 'translate(-50%, -50%)',
               zIndex: 10,
             }}
@@ -175,8 +212,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               borderRight: `${microtideSize / 2}px solid transparent`,
               borderBottom: `${microtideSize}px solid ${microColor}`,
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              top: position.top,
+              left: position.left,
               transform: 'translate(-50%, -50%)',
               zIndex: 10,
             }}
@@ -192,8 +229,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
             viewBox="0 0 100 100"
             style={{
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              top: position.top,
+              left: position.left,
               transform: 'translate(-50%, -50%)',
               zIndex: 10,
             }}
@@ -213,8 +250,8 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               height: microtideSize,
               backgroundColor: microColor,
               position: 'absolute',
-              top: '50%',
-              left: '50%',
+              top: position.top,
+              left: position.left,
               transform: 'translate(-50%, -50%)',
               zIndex: 10,
             }}
