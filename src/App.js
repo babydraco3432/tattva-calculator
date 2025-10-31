@@ -6,17 +6,40 @@ function App() {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [tattvaData, setTattvaData] = useState(calculateTattva());
   const [scryingMode, setScryingMode] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+
+  // Get user's geolocation on mount
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.log('Geolocation not available or denied, using default location (Montreal)');
+        }
+      );
+    }
+  }, []);
 
   useEffect(() => {
     // Update the time and tattva data every second
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now);
-      setTattvaData(calculateTattva(now));
+      // Pass user location if available
+      if (userLocation) {
+        setTattvaData(calculateTattva(now, userLocation.latitude, userLocation.longitude));
+      } else {
+        setTattvaData(calculateTattva(now));
+      }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [userLocation]);
 
   const appStyle = {
     minHeight: '100vh',

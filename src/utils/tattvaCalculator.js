@@ -52,9 +52,9 @@ const TATTVA_DURATION = 24;
 const TOTAL_CYCLE_DURATION = TATTVA_DURATION * 5; // 120 minutes = 2 hours
 
 // Default location coordinates (can be customized)
-// Default to New York City coordinates
-const DEFAULT_LATITUDE = 40.7128;
-const DEFAULT_LONGITUDE = -74.0060;
+// Default to Montreal, Quebec, Canada coordinates
+const DEFAULT_LATITUDE = 45.5017;
+const DEFAULT_LONGITUDE = -73.5673;
 
 // Get actual sunrise time based on geolocation
 // Falls back to default location if geolocation is not available
@@ -70,8 +70,8 @@ export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, lo
 };
 
 // Calculate which tattva is active at a given time
-export const calculateTattva = (currentTime = new Date()) => {
-  const sunrise = getSunriseTime(currentTime);
+export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
+  const sunrise = getSunriseTime(currentTime, latitude, longitude);
   
   // Calculate milliseconds since sunrise
   const msSinceSunrise = currentTime - sunrise;
