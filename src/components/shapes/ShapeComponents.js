@@ -20,6 +20,8 @@ export const OvalShape = React.memo(({ size, color, isMicrotide, position }) => 
   return <div style={style} />;
 });
 
+OvalShape.displayName = 'OvalShape';
+
 OvalShape.propTypes = {
   size: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
@@ -53,6 +55,8 @@ export const CircleShape = React.memo(({ size, color, isMicrotide, position }) =
 
   return <div style={style} />;
 });
+
+CircleShape.displayName = 'CircleShape';
 
 CircleShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -89,6 +93,8 @@ export const TriangleShape = React.memo(({ size, color, isMicrotide, position })
   return <div style={style} />;
 });
 
+TriangleShape.displayName = 'TriangleShape';
+
 TriangleShape.propTypes = {
   size: PropTypes.number.isRequired,
   color: PropTypes.string.isRequired,
@@ -121,6 +127,8 @@ export const SquareShape = React.memo(({ size, color, isMicrotide, position }) =
 
   return <div style={style} />;
 });
+
+SquareShape.displayName = 'SquareShape';
 
 SquareShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -168,6 +176,8 @@ export const CrescentShape = React.memo(({ size, color, isMicrotide, position, u
     </svg>
   );
 });
+
+CrescentShape.displayName = 'CrescentShape';
 
 CrescentShape.propTypes = {
   size: PropTypes.number.isRequired,

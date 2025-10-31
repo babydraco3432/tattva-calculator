@@ -174,4 +174,7 @@ TattvaDisplay.propTypes = {
   setScryingMode: PropTypes.func.isRequired,
 };
 
-export default React.memo(TattvaDisplay);
+const MemoizedTattvaDisplay = React.memo(TattvaDisplay);
+MemoizedTattvaDisplay.displayName = 'TattvaDisplay';
+
+export default MemoizedTattvaDisplay;
