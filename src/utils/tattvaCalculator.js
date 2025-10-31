@@ -38,7 +38,7 @@ export const TATTWAS = [
   {
     name: 'Prithvi',
     element: 'Earth',
-    backgroundColor: '#FFFF00', // Yellow background
+    backgroundColor: '#9400D3', // Purple background
     shapeColor: '#FFFF00', // Yellow square
     shape: 'square',
     description: 'Earth element'
