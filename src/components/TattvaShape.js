@@ -150,10 +150,17 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
 
     // Adjust positioning based on macrotide shape
     // Triangles have their visual center lower, so we need to offset subelements down
+    // Crescents need subelements at the bottom center of the crescent cup
     const getPositionOffset = () => {
       if (shape === 'triangle') {
         return {
           top: '62%', // Move down from 50% to better center in triangle's visual center
+          left: '50%',
+        };
+      }
+      if (shape === 'crescent') {
+        return {
+          top: '68%', // Move down to bottom center of crescent cup
           left: '50%',
         };
       }
