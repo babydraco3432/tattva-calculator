@@ -153,7 +153,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     const getPositionOffset = () => {
       if (shape === 'triangle') {
         return {
-          top: '58%', // Move down from 50% to better center in triangle
+          top: '62%', // Move down from 50% to better center in triangle's visual center
           left: '50%',
         };
       }
