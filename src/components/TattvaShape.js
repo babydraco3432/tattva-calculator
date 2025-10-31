@@ -79,7 +79,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         );
 
       case 'crescent':
-        // Crescent - properly centered using SVG for better control
+        // Crescent - properly centered using SVG with mask for visibility
         return (
           <svg
             width={size}
@@ -93,10 +93,13 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
             }}
             title={name}
           >
-            <path
-              d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
-              fill={shapeColor}
-            />
+            <defs>
+              <mask id={`crescentMask-${name}`}>
+                <rect width="100" height="100" fill="white"/>
+                <circle cx="55" cy="50" r="35" fill="black"/>
+              </mask>
+            </defs>
+            <circle cx="45" cy="50" r="45" fill={shapeColor} mask={`url(#crescentMask-${name})`}/>
           </svg>
         );
 
@@ -138,7 +141,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         case 'Tejas':
           return '#FF0000'; // Red
         case 'Apas':
-          return '#C0C0C0'; // Silver
+          return '#FFFFFF'; // White (brightened from silver for visibility)
         case 'Akasha':
           return '#000000'; // Black
         default:
@@ -228,7 +231,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
         );
 
       case 'crescent':
-        // Crescent - centered inside macrotide using SVG
+        // Crescent - centered inside macrotide using SVG with mask
         return (
           <svg
             width={microtideSize}
@@ -242,10 +245,13 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
               zIndex: 10,
             }}
           >
-            <path
-              d="M 50 10 A 40 40 0 1 0 50 90 A 30 30 0 1 1 50 10"
-              fill={microColor}
-            />
+            <defs>
+              <mask id={`crescentMask-${microName}-micro`}>
+                <rect width="100" height="100" fill="white"/>
+                <circle cx="55" cy="50" r="35" fill="black"/>
+              </mask>
+            </defs>
+            <circle cx="45" cy="50" r="45" fill={microColor} mask={`url(#crescentMask-${microName}-micro)`}/>
           </svg>
         );
 

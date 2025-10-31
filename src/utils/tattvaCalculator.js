@@ -33,7 +33,7 @@ export const TATTWAS = [
     name: 'Apas',
     element: 'Water',
     backgroundColor: '#000000', // Black background
-    shapeColor: '#C0C0C0', // Silver crescent
+    shapeColor: '#FFFFFF', // White crescent (brightened from silver for visibility on black)
     shape: 'crescent',
     description: 'Water element'
   },
