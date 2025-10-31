@@ -128,7 +128,7 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     // Only render if microtide is different from macrotide
     if (!showMicrotide) return null;
 
-    const microtideSize = size * 0.32; // Smaller size for nested microtide
+    const microtideSize = size * 0.22; // Smaller size for nested microtide (no crescent overlap)
     const { shape: microShape, name: microName } = microtide;
 
     // Subelements should use standard colors based on their element type
