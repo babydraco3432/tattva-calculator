@@ -50,6 +50,24 @@ describe('Tattva Calculator', () => {
       // Ensure background and shape colors are different (triangle should be visible)
       expect(tejas.backgroundColor).not.toBe(tejas.shapeColor);
     });
+
+    test('Apas should have silver crescent on black background', () => {
+      const apas = TATTWAS.find(t => t.name === 'Apas');
+      expect(apas.backgroundColor).toBe('#000000'); // Black background
+      expect(apas.shapeColor).toBe('#C0C0C0'); // Silver crescent
+      expect(apas.shape).toBe('crescent');
+      // Ensure background and shape colors are different (crescent should be visible)
+      expect(apas.backgroundColor).not.toBe(apas.shapeColor);
+    });
+
+    test('Akasha should have black oval on white background', () => {
+      const akasha = TATTWAS.find(t => t.name === 'Akasha');
+      expect(akasha.backgroundColor).toBe('#FFFFFF'); // White background
+      expect(akasha.shapeColor).toBe('#000000'); // Black oval
+      expect(akasha.shape).toBe('oval');
+      // Ensure background and shape colors are different (oval should be visible)
+      expect(akasha.backgroundColor).not.toBe(akasha.shapeColor);
+    });
   });
 
   describe('getSunriseTime', () => {

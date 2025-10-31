@@ -8,8 +8,8 @@ export const TATTWAS = [
   {
     name: 'Akasha',
     element: 'Ether',
-    backgroundColor: '#000000', // Black background
-    shapeColor: '#9400D3', // Purple/violet oval (visible against black)
+    backgroundColor: '#FFFFFF', // White background
+    shapeColor: '#000000', // Black oval
     shape: 'oval',
     description: 'Space/Ether element'
   },
@@ -32,8 +32,8 @@ export const TATTWAS = [
   {
     name: 'Apas',
     element: 'Water',
-    backgroundColor: '#C0C0C0', // Silver background
-    shapeColor: '#FFFFFF', // White crescent (visible against silver)
+    backgroundColor: '#000000', // Black background
+    shapeColor: '#C0C0C0', // Silver crescent
     shape: 'crescent',
     description: 'Water element'
   },

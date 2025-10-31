@@ -126,7 +126,27 @@ const TattvaShape = ({ tattva, microtide, size = 100, scryingMode = false }) => 
     if (!showMicrotide) return null;
 
     const microtideSize = size * 0.4; // Smaller size for nested microtide
-    const { shape: microShape, shapeColor: microColor } = microtide;
+    const { shape: microShape, name: microName } = microtide;
+
+    // Subelements should use standard colors based on their element type
+    const getSubelementColor = (elementName) => {
+      switch (elementName) {
+        case 'Prithvi':
+          return '#FFFF00'; // Yellow
+        case 'Vayu':
+          return '#0066FF'; // Blue
+        case 'Tejas':
+          return '#FF0000'; // Red
+        case 'Apas':
+          return '#C0C0C0'; // Silver
+        case 'Akasha':
+          return '#000000'; // Black
+        default:
+          return '#FFFFFF'; // Fallback white
+      }
+    };
+
+    const microColor = getSubelementColor(microName);
 
     // Render microtide shape directly centered within the macrotide shape
     switch (microShape) {
