@@ -79,4 +79,4 @@ TattvaShape.defaultProps = {
   scryingMode: false,
 };
 
-export default TattvaShape;
+export default React.memo(TattvaShape);

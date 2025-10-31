@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 /**
  * Renders an oval/egg shape
  */
-export const OvalShape = ({ size, color, isMicrotide, position }) => {
+export const OvalShape = React.memo(({ size, color, isMicrotide, position }) => {
   const style = {
     width: size * 0.75,
     height: size,
@@ -18,7 +18,7 @@ export const OvalShape = ({ size, color, isMicrotide, position }) => {
   };
 
   return <div style={style} />;
-};
+});
 
 OvalShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -38,7 +38,7 @@ OvalShape.defaultProps = {
 /**
  * Renders a circle shape
  */
-export const CircleShape = ({ size, color, isMicrotide, position }) => {
+export const CircleShape = React.memo(({ size, color, isMicrotide, position }) => {
   const style = {
     width: size,
     height: size,
@@ -52,7 +52,7 @@ export const CircleShape = ({ size, color, isMicrotide, position }) => {
   };
 
   return <div style={style} />;
-};
+});
 
 CircleShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -72,7 +72,7 @@ CircleShape.defaultProps = {
 /**
  * Renders a triangle shape
  */
-export const TriangleShape = ({ size, color, isMicrotide, position }) => {
+export const TriangleShape = React.memo(({ size, color, isMicrotide, position }) => {
   const style = {
     width: 0,
     height: 0,
@@ -87,7 +87,7 @@ export const TriangleShape = ({ size, color, isMicrotide, position }) => {
   };
 
   return <div style={style} />;
-};
+});
 
 TriangleShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -107,7 +107,7 @@ TriangleShape.defaultProps = {
 /**
  * Renders a square shape
  */
-export const SquareShape = ({ size, color, isMicrotide, position }) => {
+export const SquareShape = React.memo(({ size, color, isMicrotide, position }) => {
   const style = {
     width: size,
     height: size,
@@ -120,7 +120,7 @@ export const SquareShape = ({ size, color, isMicrotide, position }) => {
   };
 
   return <div style={style} />;
-};
+});
 
 SquareShape.propTypes = {
   size: PropTypes.number.isRequired,
@@ -140,7 +140,7 @@ SquareShape.defaultProps = {
 /**
  * Renders a crescent shape using SVG
  */
-export const CrescentShape = ({ size, color, isMicrotide, position, uniqueId }) => {
+export const CrescentShape = React.memo(({ size, color, isMicrotide, position, uniqueId }) => {
   const maskId = `crescentMask-${uniqueId}`;
 
   const style = {
@@ -167,7 +167,7 @@ export const CrescentShape = ({ size, color, isMicrotide, position, uniqueId }) 
       <ellipse cx="50" cy="51" rx="48" ry="32" fill={color} mask={`url(#${maskId})`} />
     </svg>
   );
-};
+});
 
 CrescentShape.propTypes = {
   size: PropTypes.number.isRequired,

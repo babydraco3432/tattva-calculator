@@ -1,50 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TattvaDisplay from './components/TattvaDisplay';
-import { calculateTattva } from './utils/tattvaCalculator';
-import { DURATIONS, FONT_SIZES, COLORS, LAYOUT, FONTS } from './constants/styles';
+import { useGeolocation } from './hooks/useGeolocation';
+import { useTattvaUpdates } from './hooks/useTattvaUpdates';
+import { FONT_SIZES, COLORS, LAYOUT, FONTS } from './constants/styles';
 
 /**
  * Main App component for the Tattva Calculator
  * Manages time updates and geolocation for accurate sunrise calculations
  */
 function App() {
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [tattvaData, setTattvaData] = useState(calculateTattva());
   const [scryingMode, setScryingMode] = useState(false);
-  const [userLocation, setUserLocation] = useState(null);
-
-  // Get user's geolocation on mount
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setUserLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-        },
-        (error) => {
-          console.log('Geolocation not available or denied, using default location (Montreal)');
-        }
-      );
-    }
-  }, []);
-
-  // Update the time and tattva data periodically
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now);
-      // Pass user location if available
-      if (userLocation) {
-        setTattvaData(calculateTattva(now, userLocation.latitude, userLocation.longitude));
-      } else {
-        setTattvaData(calculateTattva(now));
-      }
-    }, DURATIONS.UPDATE_INTERVAL_MS);
-
-    return () => clearInterval(timer);
-  }, [userLocation]);
+  
+  // Custom hooks for geolocation and tattva updates
+  const { userLocation } = useGeolocation();
+  const { currentTime, tattvaData } = useTattvaUpdates(userLocation);
 
   const appStyle = {
     minHeight: '100vh',
