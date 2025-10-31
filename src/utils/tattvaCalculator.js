@@ -2,6 +2,8 @@
 // The tattva cycle starts at sunrise and each tattva lasts for 24 minutes
 // There are 5 tattwas that cycle throughout the day
 
+import SunCalc from 'suncalc';
+
 export const TATTWAS = [
   {
     name: 'Akasha',
@@ -49,28 +51,45 @@ export const TATTWAS = [
 const TATTVA_DURATION = 24;
 const TOTAL_CYCLE_DURATION = TATTVA_DURATION * 5; // 120 minutes = 2 hours
 
-// Calculate sunrise time (simplified - using 6:00 AM as default)
-// In a real application, this would be calculated based on location and date
-export const getSunriseTime = () => {
-  const sunrise = new Date();
-  sunrise.setHours(6, 0, 0, 0);
-  return sunrise;
+// Default location coordinates (can be customized)
+// Default to New York City coordinates
+const DEFAULT_LATITUDE = 40.7128;
+const DEFAULT_LONGITUDE = -74.0060;
+
+// Get actual sunrise time based on geolocation
+// Falls back to default location if geolocation is not available
+export const getSunriseTime = (date = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
+  const times = SunCalc.getTimes(date, latitude, longitude);
+  return times.sunrise;
+};
+
+// Get actual sunset time based on geolocation
+export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
+  const times = SunCalc.getTimes(date, latitude, longitude);
+  return times.sunset;
 };
 
 // Calculate which tattva is active at a given time
 export const calculateTattva = (currentTime = new Date()) => {
-  const sunrise = getSunriseTime();
+  const sunrise = getSunriseTime(currentTime);
   
-  // Calculate minutes since sunrise
-  const minutesSinceSunrise = Math.floor((currentTime - sunrise) / (1000 * 60));
+  // Calculate milliseconds since sunrise
+  const msSinceSunrise = currentTime - sunrise;
+  const minutesSinceSunrise = Math.floor(msSinceSunrise / (1000 * 60));
+  const secondsSinceSunrise = Math.floor(msSinceSunrise / 1000);
   
   // Handle time before sunrise (use previous day's cycle)
   const adjustedMinutes = minutesSinceSunrise >= 0 
     ? minutesSinceSunrise 
     : (24 * 60) + minutesSinceSunrise;
   
+  const adjustedSeconds = secondsSinceSunrise >= 0
+    ? secondsSinceSunrise
+    : (24 * 60 * 60) + secondsSinceSunrise;
+  
   // Find position in the 2-hour cycle
   const cyclePosition = adjustedMinutes % TOTAL_CYCLE_DURATION;
+  const cyclePositionSeconds = adjustedSeconds % (TOTAL_CYCLE_DURATION * 60);
   
   // Calculate macrotide (main tattva)
   const macrotideIndex = Math.floor(cyclePosition / TATTVA_DURATION);
@@ -80,18 +99,22 @@ export const calculateTattva = (currentTime = new Date()) => {
   // Each microtide lasts 1/5 of the macrotide duration (4.8 minutes)
   const microtideDuration = TATTVA_DURATION / 5;
   const positionInMacrotide = cyclePosition % TATTVA_DURATION;
+  const positionInMacrotideSeconds = cyclePositionSeconds % (TATTVA_DURATION * 60);
   const microtideIndex = Math.floor(positionInMacrotide / microtideDuration);
   const microtide = TATTWAS[microtideIndex];
   
-  // Calculate remaining time for current macrotide and microtide
-  const macrotideRemainingMinutes = TATTVA_DURATION - (cyclePosition % TATTVA_DURATION);
-  const microtideRemainingMinutes = microtideDuration - (positionInMacrotide % microtideDuration);
+  // Calculate remaining time for current macrotide and microtide in seconds
+  const macrotideRemainingSeconds = (TATTVA_DURATION * 60) - positionInMacrotideSeconds;
+  const microtideRemainingSeconds = (microtideDuration * 60) - (positionInMacrotideSeconds % (microtideDuration * 60));
   
   return {
     macrotide,
     microtide,
-    macrotideRemainingMinutes: Math.ceil(macrotideRemainingMinutes),
-    microtideRemainingMinutes: Math.ceil(microtideRemainingMinutes),
+    macrotideRemainingSeconds,
+    microtideRemainingSeconds,
+    // Keep these for backward compatibility with tests
+    macrotideRemainingMinutes: Math.ceil(macrotideRemainingSeconds / 60),
+    microtideRemainingMinutes: Math.ceil(microtideRemainingSeconds / 60),
     cyclePosition,
     sunrise
   };
