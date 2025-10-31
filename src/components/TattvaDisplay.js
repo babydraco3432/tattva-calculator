@@ -2,7 +2,7 @@ import React from 'react';
 import TattvaShape from './TattvaShape';
 
 const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode }) => {
-  const { macrotide, microtide, macrotideRemainingMinutes, microtideRemainingMinutes, sunrise } = tattvaData;
+  const { macrotide, microtide, macrotideRemainingSeconds, microtideRemainingSeconds, sunrise } = tattvaData;
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { 
@@ -10,6 +10,21 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
       minute: '2-digit',
       second: '2-digit'
     });
+  };
+
+  // Format time remaining for macrotide as HH:MM:SS
+  const formatMacrotideRemaining = (totalSeconds) => {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  // Format time remaining for microtide as MM:SS
+  const formatMicrotideRemaining = (totalSeconds) => {
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
   const containerStyle = {
@@ -119,14 +134,14 @@ const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode })
             <div style={detailStyle}>
               <strong>Current Macrotide:</strong> {macrotide.name} ({macrotide.element})
               <div style={timeRemainingStyle}>
-                {macrotideRemainingMinutes} minutes remaining
+                {formatMacrotideRemaining(macrotideRemainingSeconds)} remaining
               </div>
             </div>
 
             <div style={detailStyle}>
               <strong>Current Microtide:</strong> {microtide.name} ({microtide.element})
               <div style={timeRemainingStyle}>
-                {microtideRemainingMinutes.toFixed(1)} minutes remaining
+                {formatMicrotideRemaining(microtideRemainingSeconds)} remaining
               </div>
             </div>
           </div>
