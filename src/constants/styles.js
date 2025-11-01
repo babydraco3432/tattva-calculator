@@ -8,7 +8,7 @@ export const SIZES = {
   TATTVA_SHAPE_SMALL: 100,
   TATTVA_SHAPE_NORMAL: 200,
   TATTVA_SHAPE_LARGE: 400,
-  MICROTIDE_RATIO: 0.22, // Microtide size relative to macrotide
+  MICROTIDE_RATIO: 0.40, // Microtide size relative to macrotide
   CONTAINER_RATIO: 1.5, // Container size relative to shape size
 };
 
