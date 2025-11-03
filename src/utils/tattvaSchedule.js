@@ -32,15 +32,15 @@ export const generateDailySchedule = (currentDate = new Date(), latitude, longit
     const tattvaData = calculateTattva(currentTime, latitude, longitude);
     const endTime = new Date(currentTime.getTime() + MICROTIDE_DURATION_MS);
     
-    // Don't add entries that go past next sunrise
-    if (endTime <= nextSunrise) {
-      schedule.push({
-        startTime: new Date(currentTime),
-        endTime: endTime,
-        macrotide: tattvaData.macrotide,
-        microtide: tattvaData.microtide
-      });
-    }
+    // Truncate the last entry to end exactly at next sunrise
+    const actualEndTime = endTime > nextSunrise ? nextSunrise : endTime;
+    
+    schedule.push({
+      startTime: new Date(currentTime),
+      endTime: actualEndTime,
+      macrotide: tattvaData.macrotide,
+      microtide: tattvaData.microtide
+    });
     
     currentTime = endTime;
   }

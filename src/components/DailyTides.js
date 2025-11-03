@@ -120,8 +120,20 @@ DailyTides.propTypes = {
     PropTypes.shape({
       startTime: PropTypes.instanceOf(Date).isRequired,
       endTime: PropTypes.instanceOf(Date).isRequired,
-      macrotide: PropTypes.object.isRequired,
-      microtide: PropTypes.object.isRequired,
+      macrotide: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        element: PropTypes.string.isRequired,
+        backgroundColor: PropTypes.string.isRequired,
+        shapeColor: PropTypes.string.isRequired,
+        shape: PropTypes.string.isRequired,
+      }).isRequired,
+      microtide: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        element: PropTypes.string.isRequired,
+        backgroundColor: PropTypes.string.isRequired,
+        shapeColor: PropTypes.string.isRequired,
+        shape: PropTypes.string.isRequired,
+      }).isRequired,
     })
   ).isRequired,
   sunrise: PropTypes.instanceOf(Date).isRequired,

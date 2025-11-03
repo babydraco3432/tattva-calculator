@@ -19,14 +19,14 @@ function App() {
   const { currentTime, tattvaData } = useTattvaUpdates(userLocation);
 
   // Generate daily schedule (memoized to avoid recalculating on every render)
-  const currentDate = currentTime.getDate();
+  const currentDateString = currentTime.toDateString();
   const dailySchedule = useMemo(() => {
     if (userLocation) {
       return generateDailySchedule(currentTime, userLocation.latitude, userLocation.longitude);
     }
     return generateDailySchedule(currentTime);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentDate, userLocation]); // Regenerate when date changes or location changes
+  }, [currentDateString, userLocation]); // Regenerate when date changes or location changes
 
   const appStyle = {
     minHeight: '100vh',
