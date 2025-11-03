@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
-import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS } from '../constants/styles';
+import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS, SIZES, EFFECTS } from '../constants/styles';
 import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
 
 /**
  * Small shape component for displaying tattva shapes in the table
  */
 const TattvaSmallShape = ({ tattva, uniqueId }) => {
-  const size = 14;
+  const size = SIZES.TATTVA_SHAPE_TINY;
   const containerStyle = {
     display: 'inline-block',
     width: `${size}px`,
@@ -118,7 +118,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const rowStyle = (isCurrentTide) => ({
     cursor: 'default',
-    boxShadow: isCurrentTide ? `0 0 0 3px ${COLORS.HIGHLIGHT_BORDER}, inset 0 0 0 2px ${COLORS.HIGHLIGHT_BORDER}` : 'none',
+    boxShadow: isCurrentTide ? EFFECTS.BOX_SHADOW_CURRENT_TIDE(COLORS.HIGHLIGHT_BORDER) : 'none',
     backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
     position: 'relative',
   });
