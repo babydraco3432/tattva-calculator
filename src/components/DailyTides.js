@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
-import { FONT_SIZES, COLORS, LAYOUT } from '../constants/styles';
+import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS } from '../constants/styles';
 import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
 
 /**
@@ -27,16 +27,16 @@ const TattvaSmallShape = ({ tattva, uniqueId }) => {
 
     switch (tattva.shape) {
       case 'oval':
-        return <OvalShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+        return <OvalShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
       case 'circle':
-        return <CircleShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+        return <CircleShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
       case 'triangle':
         // Triangle needs special positioning to center properly
-        return <TriangleShape {...shapeProps} position={{ top: '62%', left: '50%' }} />;
+        return <TriangleShape {...shapeProps} position={{ top: SHAPE_POSITIONS.TRIANGLE_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
       case 'square':
-        return <SquareShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+        return <SquareShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
       case 'crescent':
-        return <CrescentShape {...shapeProps} position={{ top: '50%', left: '50%' }} uniqueId={uniqueId} />;
+        return <CrescentShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} uniqueId={uniqueId} />;
       default:
         return null;
     }
@@ -107,7 +107,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const getTdStyle = (isCurrentTide) => ({
     padding: '14px 12px',
-    borderBottom: '1px solid #e8e8e8',
+    borderBottom: `1px solid ${COLORS.TABLE_BORDER}`,
     color: COLORS.DETAIL_TEXT,
     backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
     textAlign: 'center',

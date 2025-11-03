@@ -50,6 +50,7 @@ export const COLORS = {
   DARK_HEADING: '#222',
   HIGHLIGHT_BACKGROUND: '#fffacd', // Light yellow for highlighting current tide
   HIGHLIGHT_BORDER: '#ffd700', // Gold for highlighting current tide border
+  TABLE_BORDER: '#e8e8e8', // Light gray for table cell borders
 };
 
 // Border and shadow styles
