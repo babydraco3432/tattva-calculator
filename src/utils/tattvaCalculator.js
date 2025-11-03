@@ -75,6 +75,11 @@ export const TATTWAS = [
 const MACROTIDE_DURATION = 120; // 2 hours per macrotide
 const TOTAL_CYCLE_DURATION = MACROTIDE_DURATION * 5; // 600 minutes = 10 hours
 
+const MINUTE_IN_MS = 60 * 1000;
+const MACROTIDE_DURATION_MS = MACROTIDE_DURATION * MINUTE_IN_MS;
+const MICROTIDE_DURATION_MS = MACROTIDE_DURATION_MS / 5;
+const TOTAL_CYCLE_DURATION_MS = TOTAL_CYCLE_DURATION * MINUTE_IN_MS;
+
 /**
  * Default location coordinates
  * Falls back to Montreal, Quebec, Canada when geolocation is unavailable
@@ -130,60 +135,37 @@ export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, lo
  * @returns {Date} return.sunrise - Sunrise time for the given date and location
  */
 export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
-  const sunrise = getSunriseTime(currentTime, latitude, longitude);
+  const todaySunrise = getSunriseTime(currentTime, latitude, longitude);
+  let referenceSunrise = todaySunrise;
 
-  // Calculate milliseconds since sunrise
-  const msSinceSunrise = currentTime - sunrise;
-  const minutesSinceSunrise = Math.floor(msSinceSunrise / (1000 * 60));
-  const secondsSinceSunrise = Math.floor(msSinceSunrise / 1000);
+  if (currentTime < todaySunrise) {
+    const previousDay = new Date(currentTime);
+    previousDay.setDate(previousDay.getDate() - 1);
+    referenceSunrise = getSunriseTime(previousDay, latitude, longitude);
+  }
 
-  // Handle time before sunrise (use previous day's cycle)
-  const adjustedMinutes = minutesSinceSunrise >= 0
-    ? minutesSinceSunrise
-    : (24 * 60) + minutesSinceSunrise;
+  const msSinceSunrise = currentTime - referenceSunrise;
+  const cyclePositionMs = msSinceSunrise % TOTAL_CYCLE_DURATION_MS;
 
-  const adjustedSeconds = secondsSinceSunrise >= 0
-    ? secondsSinceSunrise
-    : (24 * 60 * 60) + secondsSinceSunrise;
-
-  // Find position in the 2-hour cycle
-  const cyclePosition = adjustedMinutes % TOTAL_CYCLE_DURATION;
-  const cyclePositionSeconds = adjustedSeconds % (TOTAL_CYCLE_DURATION * 60);
-
-  // Calculate macrotide (main tattva)
-  const macrotideIndex = Math.floor(cyclePosition / MACROTIDE_DURATION);
+  const macrotideIndex = Math.floor(cyclePositionMs / MACROTIDE_DURATION_MS);
   const macrotide = TATTWAS[macrotideIndex];
 
-
-  // Calculate microtide (sub-tattva within the macrotide)
-  // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
-  // Microtide cycles within each macrotide, resetting at macrotide boundaries
-  const MICROTIDE_DURATION = MACROTIDE_DURATION / 5;
-  const positionInMacrotide = cyclePosition % MACROTIDE_DURATION;
-  const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
-
-  // Calculate microtide based on position within the current macrotide
-  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
+  const positionInMacrotideMs = cyclePositionMs % MACROTIDE_DURATION_MS;
+  const microtideIndex = Math.floor(positionInMacrotideMs / MICROTIDE_DURATION_MS);
   const microtide = TATTWAS[microtideIndex];
 
-  // Calculate remaining time for current macrotide and microtide in seconds
-  const macrotideRemainingSeconds = (MACROTIDE_DURATION * 60) - positionInMacrotideSeconds;
-  const microtideRemainingSeconds = (MICROTIDE_DURATION * 60) - (positionInMacrotideSeconds % (MICROTIDE_DURATION * 60));
-
-  // Handle edge case: if remaining time is 0, set to full duration
-  const safeMacrotideRemaining = macrotideRemainingSeconds === 0 ? (MACROTIDE_DURATION * 60) : macrotideRemainingSeconds;
-  const safeMicrotideRemaining = microtideRemainingSeconds === 0 ? (MICROTIDE_DURATION * 60) : microtideRemainingSeconds;
+  const macrotideRemainingMs = MACROTIDE_DURATION_MS - positionInMacrotideMs || MACROTIDE_DURATION_MS;
+  const microtideRemainingMs = MICROTIDE_DURATION_MS - (positionInMacrotideMs % MICROTIDE_DURATION_MS) || MICROTIDE_DURATION_MS;
 
   return {
     macrotide,
     microtide,
-    macrotideRemainingSeconds: safeMacrotideRemaining,
-    microtideRemainingSeconds: safeMicrotideRemaining,
-    // Keep these for backward compatibility with tests
-    macrotideRemainingMinutes: Math.ceil(safeMacrotideRemaining / 60),
-    microtideRemainingMinutes: Math.ceil(safeMicrotideRemaining / 60),
-    cyclePosition,
-    sunrise
+    macrotideRemainingSeconds: Math.floor(macrotideRemainingMs / 1000),
+    microtideRemainingSeconds: Math.floor(microtideRemainingMs / 1000),
+    macrotideRemainingMinutes: Math.ceil(macrotideRemainingMs / MINUTE_IN_MS),
+    microtideRemainingMinutes: Math.ceil(microtideRemainingMs / MINUTE_IN_MS),
+    cyclePosition: Math.floor(cyclePositionMs / MINUTE_IN_MS),
+    sunrise: referenceSunrise
   };
 };
 
