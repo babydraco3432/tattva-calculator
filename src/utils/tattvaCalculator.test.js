@@ -51,9 +51,10 @@ describe('Tattva Calculator', () => {
       expect(tejas.backgroundColor).not.toBe(tejas.shapeColor);
     });
 
-    test('Apas should have silver crescent on silver background', () => {
+    test('Apas should have silver crescent on black background', () => {
       const apas = TATTWAS.find(t => t.name === 'Apas');
-      expect(apas.backgroundColor).toBe('#C0C0C0'); // Silver background
+      expect(apas.backgroundColor).toBe('#000000'); // Black background
+      expect(apas.textColor).toBe('#C0C0C0'); // Silver text
       expect(apas.shapeColor).toBe('#C0C0C0'); // Silver crescent
       expect(apas.shape).toBe('crescent');
     });

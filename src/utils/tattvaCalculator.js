@@ -51,8 +51,8 @@ export const TATTWAS = [
   {
     name: 'Apas',
     element: 'Water',
-    backgroundColor: '#C0C0C0', // Silver background
-    textColor: '#000000', // Black text
+    backgroundColor: '#000000', // Black background
+    textColor: '#C0C0C0', // Silver text
     shapeColor: '#C0C0C0', // Silver crescent
     shape: 'crescent',
     description: 'Water element'

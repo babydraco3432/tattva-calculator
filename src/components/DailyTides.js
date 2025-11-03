@@ -105,11 +105,11 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
     textTransform: 'uppercase',
   };
 
-  const getTdStyle = (isCurrentTide) => ({
+  const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
     padding: '14px 12px',
     borderBottom: `1px solid ${COLORS.TABLE_BORDER}`,
-    color: COLORS.DETAIL_TEXT,
-    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
+    color: isCurrentTide ? COLORS.DETAIL_TEXT : (tattvaTextColor || COLORS.DETAIL_TEXT),
+    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : (tattvaBackgroundColor || 'transparent'),
     textAlign: 'center',
     fontWeight: isCurrentTide ? 'bold' : 'normal',
     fontSize: isCurrentTide ? '15px' : FONT_SIZES.DETAIL,
@@ -150,13 +150,13 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
               const isCurrent = isCurrentTide(entry);
               return (
                 <tr key={index} style={rowStyle(isCurrent)}>
-                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.startTime)}</td>
-                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.endTime)}</td>
-                  <td style={getTdStyle(isCurrent)}>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.startTime)}</td>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.endTime)}</td>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>
                     <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${index}`} />
                     {entry.macrotide.name} ({entry.macrotide.element})
                   </td>
-                  <td style={getTdStyle(isCurrent)}>
+                  <td style={getTdStyle(isCurrent, entry.microtide.backgroundColor, entry.microtide.textColor)}>
                     <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${index}`} />
                     {entry.microtide.name} ({entry.microtide.element})
                   </td>
