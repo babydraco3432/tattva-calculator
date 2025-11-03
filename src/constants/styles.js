@@ -48,6 +48,8 @@ export const COLORS = {
   DANGER: '#FF1744',
   BACKGROUND_LIGHT: '#f0f2f5',
   DARK_HEADING: '#222',
+  HIGHLIGHT_BACKGROUND: '#fffacd', // Light yellow for highlighting current tide
+  HIGHLIGHT_BORDER: '#ffd700', // Gold for highlighting current tide border
 };
 
 // Border and shadow styles

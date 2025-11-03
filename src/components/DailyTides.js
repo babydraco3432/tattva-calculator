@@ -109,7 +109,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
     padding: '14px 12px',
     borderBottom: '1px solid #e8e8e8',
     color: COLORS.DETAIL_TEXT,
-    backgroundColor: isCurrentTide ? '#fffacd' : 'transparent',
+    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
     textAlign: 'center',
     fontWeight: isCurrentTide ? 'bold' : 'normal',
     fontSize: isCurrentTide ? '15px' : FONT_SIZES.DETAIL,
@@ -118,8 +118,8 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const rowStyle = (isCurrentTide) => ({
     cursor: 'default',
-    boxShadow: isCurrentTide ? '0 0 0 3px #ffd700, inset 0 0 0 2px #ffd700' : 'none',
-    backgroundColor: isCurrentTide ? '#fffacd' : 'transparent',
+    boxShadow: isCurrentTide ? `0 0 0 3px ${COLORS.HIGHLIGHT_BORDER}, inset 0 0 0 2px ${COLORS.HIGHLIGHT_BORDER}` : 'none',
+    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
     position: 'relative',
   });
 
