@@ -25,6 +25,7 @@ export const TATTWAS = [
     name: 'Akasha',
     element: 'Ether',
     backgroundColor: '#FFFFFF', // White background
+    textColor: '#000000', // Black text
     shapeColor: '#000000', // Black oval
     shape: 'oval',
     description: 'Space/Ether element'
@@ -33,6 +34,7 @@ export const TATTWAS = [
     name: 'Vayu',
     element: 'Air',
     backgroundColor: '#FF8C00', // Orange background
+    textColor: '#0066FF', // Blue text
     shapeColor: '#0066FF', // Blue circle
     shape: 'circle',
     description: 'Air element'
@@ -41,14 +43,16 @@ export const TATTWAS = [
     name: 'Tejas',
     element: 'Fire',
     backgroundColor: '#FF0000', // Red background
-    shapeColor: '#00FF00', // Green triangle (visible on red background)
+    textColor: '#50C878', // Emerald green text
+    shapeColor: '#50C878', // Emerald green triangle
     shape: 'triangle',
     description: 'Fire element'
   },
   {
     name: 'Apas',
     element: 'Water',
-    backgroundColor: '#000000', // Black background
+    backgroundColor: '#C0C0C0', // Silver background
+    textColor: '#000000', // Black text
     shapeColor: '#C0C0C0', // Silver crescent
     shape: 'crescent',
     description: 'Water element'
@@ -57,6 +61,7 @@ export const TATTWAS = [
     name: 'Prithvi',
     element: 'Earth',
     backgroundColor: '#9400D3', // Purple background
+    textColor: '#FFFF00', // Yellow text
     shapeColor: '#FFFF00', // Yellow square
     shape: 'square',
     description: 'Earth element'

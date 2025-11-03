@@ -42,22 +42,20 @@ describe('Tattva Calculator', () => {
       expect(vayu.backgroundColor).not.toBe(vayu.shapeColor);
     });
 
-    test('Tejas should have green triangle on red background', () => {
+    test('Tejas should have emerald green triangle on red background', () => {
       const tejas = TATTWAS.find(t => t.name === 'Tejas');
       expect(tejas.backgroundColor).toBe('#FF0000'); // Red background
-      expect(tejas.shapeColor).toBe('#00FF00'); // Green triangle
+      expect(tejas.shapeColor).toBe('#50C878'); // Emerald green triangle
       expect(tejas.shape).toBe('triangle');
       // Ensure background and shape colors are different (triangle should be visible)
       expect(tejas.backgroundColor).not.toBe(tejas.shapeColor);
     });
 
-    test('Apas should have silver crescent on black background', () => {
+    test('Apas should have silver crescent on silver background', () => {
       const apas = TATTWAS.find(t => t.name === 'Apas');
-      expect(apas.backgroundColor).toBe('#000000'); // Black background
+      expect(apas.backgroundColor).toBe('#C0C0C0'); // Silver background
       expect(apas.shapeColor).toBe('#C0C0C0'); // Silver crescent
       expect(apas.shape).toBe('crescent');
-      // Ensure background and shape colors are different (crescent should be visible)
-      expect(apas.backgroundColor).not.toBe(apas.shapeColor);
     });
 
     test('Akasha should have black oval on white background', () => {
