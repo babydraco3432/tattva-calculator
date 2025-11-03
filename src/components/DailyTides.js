@@ -2,6 +2,56 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
 import { FONT_SIZES, COLORS, LAYOUT } from '../constants/styles';
+import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
+
+/**
+ * Small shape component for displaying tattva shapes in the table
+ */
+const TattvaSmallShape = ({ tattva, uniqueId }) => {
+  const size = 14;
+  const containerStyle = {
+    display: 'inline-block',
+    width: `${size}px`,
+    height: `${size}px`,
+    position: 'relative',
+    marginRight: '10px',
+    verticalAlign: 'middle',
+  };
+
+  const renderShape = () => {
+    const shapeProps = {
+      size,
+      color: tattva.shapeColor,
+      isMicrotide: false,
+    };
+
+    switch (tattva.shape) {
+      case 'oval':
+        return <OvalShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+      case 'circle':
+        return <CircleShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+      case 'triangle':
+        // Triangle needs special positioning to center properly
+        return <TriangleShape {...shapeProps} position={{ top: '62%', left: '50%' }} />;
+      case 'square':
+        return <SquareShape {...shapeProps} position={{ top: '50%', left: '50%' }} />;
+      case 'crescent':
+        return <CrescentShape {...shapeProps} position={{ top: '50%', left: '50%' }} uniqueId={uniqueId} />;
+      default:
+        return null;
+    }
+  };
+
+  return <span style={containerStyle}>{renderShape()}</span>;
+};
+
+TattvaSmallShape.propTypes = {
+  tattva: PropTypes.shape({
+    shape: PropTypes.string.isRequired,
+    shapeColor: PropTypes.string.isRequired,
+  }).isRequired,
+  uniqueId: PropTypes.string.isRequired,
+};
 
 /**
  * DailyTides component displays a timetable of tattwas from sunrise to next sunrise
@@ -55,11 +105,11 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
     textTransform: 'uppercase',
   };
 
-  const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
+  const getTdStyle = (isCurrentTide) => ({
     padding: '14px 12px',
     borderBottom: '1px solid #e8e8e8',
-    color: tattvaTextColor || COLORS.DETAIL_TEXT,
-    backgroundColor: tattvaBackgroundColor || 'transparent',
+    color: COLORS.DETAIL_TEXT,
+    backgroundColor: isCurrentTide ? '#fffacd' : 'transparent',
     textAlign: 'center',
     fontWeight: isCurrentTide ? 'bold' : 'normal',
     fontSize: isCurrentTide ? '15px' : FONT_SIZES.DETAIL,
@@ -68,7 +118,8 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const rowStyle = (isCurrentTide) => ({
     cursor: 'default',
-    boxShadow: isCurrentTide ? 'inset 0 0 0 2px #3498db' : 'none',
+    boxShadow: isCurrentTide ? '0 0 0 3px #ffd700, inset 0 0 0 2px #ffd700' : 'none',
+    backgroundColor: isCurrentTide ? '#fffacd' : 'transparent',
     position: 'relative',
   });
 
@@ -99,32 +150,14 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
               const isCurrent = isCurrentTide(entry);
               return (
                 <tr key={index} style={rowStyle(isCurrent)}>
-                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.startTime)}</td>
-                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.endTime)}</td>
-                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>
-                    <span style={{ 
-                      display: 'inline-block',
-                      width: '14px',
-                      height: '14px',
-                      backgroundColor: entry.macrotide.backgroundColor,
-                      border: entry.macrotide.backgroundColor === '#FFFFFF' ? '1px solid #ccc' : 'none',
-                      marginRight: '10px',
-                      verticalAlign: 'middle',
-                      borderRadius: '2px',
-                    }} />
+                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.startTime)}</td>
+                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.endTime)}</td>
+                  <td style={getTdStyle(isCurrent)}>
+                    <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${index}`} />
                     {entry.macrotide.name} ({entry.macrotide.element})
                   </td>
-                  <td style={getTdStyle(isCurrent, entry.microtide.backgroundColor, entry.microtide.textColor)}>
-                    <span style={{ 
-                      display: 'inline-block',
-                      width: '14px',
-                      height: '14px',
-                      backgroundColor: entry.microtide.backgroundColor,
-                      border: entry.microtide.backgroundColor === '#FFFFFF' ? '1px solid #ccc' : 'none',
-                      marginRight: '10px',
-                      verticalAlign: 'middle',
-                      borderRadius: '2px',
-                    }} />
+                  <td style={getTdStyle(isCurrent)}>
+                    <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${index}`} />
                     {entry.microtide.name} ({entry.microtide.element})
                   </td>
                 </tr>
