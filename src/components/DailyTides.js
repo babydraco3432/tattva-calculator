@@ -99,8 +99,8 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
               const isCurrent = isCurrentTide(entry);
               return (
                 <tr key={index} style={rowStyle(isCurrent)}>
-                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.startTime)}</td>
-                  <td style={getTdStyle(isCurrent)}>{formatTime(entry.endTime)}</td>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.startTime)}</td>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.endTime)}</td>
                   <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>
                     <span style={{ 
                       display: 'inline-block',
