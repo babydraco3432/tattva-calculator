@@ -162,7 +162,8 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
 
   // Calculate microtide based on position within the current macrotide
-  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
+  const microtideIndexInCycle = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
+  const microtideIndex = (macrotideIndex + microtideIndexInCycle) % TATTWAS.length;
   const microtide = TATTWAS[microtideIndex];
 
   // Calculate remaining time for current macrotide and microtide in seconds
