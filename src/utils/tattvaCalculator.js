@@ -1,6 +1,6 @@
 /**
  * Tattva Calculator - Core calculation logic
- * 
+ *
  * The tattva cycle starts at sunrise and each tattva lasts for 24 minutes.
  * There are 5 tattwas that cycle throughout the day:
  * - Akasha (Ether)
@@ -8,7 +8,7 @@
  * - Tejas (Fire)
  * - Apas (Water)
  * - Prithvi (Earth)
- * 
+ *
  * Each complete cycle lasts 10 hours (600 minutes), with each macrotide
  * lasting 2 hours (120 minutes) and containing 5 microtides of 24 minutes each.
  */
@@ -85,7 +85,7 @@ const DEFAULT_LONGITUDE = -73.5673;
 /**
  * Get actual sunrise time based on geolocation using SunCalc library
  * Falls back to default location if coordinates are not provided
- * 
+ *
  * @param {Date} [date=new Date()] - Date for which to calculate sunrise
  * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate
  * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate
@@ -98,7 +98,7 @@ export const getSunriseTime = (date = new Date(), latitude = DEFAULT_LATITUDE, l
 
 /**
  * Get actual sunset time based on geolocation using SunCalc library
- * 
+ *
  * @param {Date} [date=new Date()] - Date for which to calculate sunset
  * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate
  * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate
@@ -111,11 +111,11 @@ export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, lo
 
 /**
  * Calculate which tattva is active at a given time
- * 
+ *
  * The calculation determines both the macrotide (2-hour period) and microtide
  * (24-minute period within the macrotide). The cycle starts at sunrise and
  * repeats every 10 hours.
- * 
+ *
  * @param {Date} [currentTime=new Date()] - Time for which to calculate tattva
  * @param {number} [latitude=DEFAULT_LATITUDE] - Latitude coordinate for sunrise calculation
  * @param {number} [longitude=DEFAULT_LONGITUDE] - Longitude coordinate for sunrise calculation
@@ -131,46 +131,47 @@ export const getSunsetTime = (date = new Date(), latitude = DEFAULT_LATITUDE, lo
  */
 export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LATITUDE, longitude = DEFAULT_LONGITUDE) => {
   const sunrise = getSunriseTime(currentTime, latitude, longitude);
-  
+
   // Calculate milliseconds since sunrise
   const msSinceSunrise = currentTime - sunrise;
   const minutesSinceSunrise = Math.floor(msSinceSunrise / (1000 * 60));
   const secondsSinceSunrise = Math.floor(msSinceSunrise / 1000);
-  
+
   // Handle time before sunrise (use previous day's cycle)
-  const adjustedMinutes = minutesSinceSunrise >= 0 
-    ? minutesSinceSunrise 
+  const adjustedMinutes = minutesSinceSunrise >= 0
+    ? minutesSinceSunrise
     : (24 * 60) + minutesSinceSunrise;
-  
+
   const adjustedSeconds = secondsSinceSunrise >= 0
     ? secondsSinceSunrise
     : (24 * 60 * 60) + secondsSinceSunrise;
-  
+
   // Find position in the 2-hour cycle
   const cyclePosition = adjustedMinutes % TOTAL_CYCLE_DURATION;
   const cyclePositionSeconds = adjustedSeconds % (TOTAL_CYCLE_DURATION * 60);
-  
+
   // Calculate macrotide (main tattva)
   const macrotideIndex = Math.floor(cyclePosition / MACROTIDE_DURATION);
   const macrotide = TATTWAS[macrotideIndex];
-  
+
   // Calculate microtide (sub-tattva within the macrotide)
   // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
   // Microtide always cycles from Akasha to Prithvi (0-4), regardless of macrotide
   const MICROTIDE_DURATION = MACROTIDE_DURATION / 5;
-  const positionInMacrotide = cyclePosition % MACROTIDE_DURATION;
   const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
-  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
-  const microtide = TATTWAS[microtideIndex];
-  
+
+  // Use absolute cycle position to ensure continuous 24-minute microtide cycling
+  const microtideIndex = Math.floor(cyclePosition / MICROTIDE_DURATION);
+  const microtide = TATTWAS[microtideIndex % TATTWAS.length];
+
   // Calculate remaining time for current macrotide and microtide in seconds
   const macrotideRemainingSeconds = (MACROTIDE_DURATION * 60) - positionInMacrotideSeconds;
   const microtideRemainingSeconds = (MICROTIDE_DURATION * 60) - (positionInMacrotideSeconds % (MICROTIDE_DURATION * 60));
-  
+
   // Handle edge case: if remaining time is 0, set to full duration
   const safeMacrotideRemaining = macrotideRemainingSeconds === 0 ? (MACROTIDE_DURATION * 60) : macrotideRemainingSeconds;
   const safeMicrotideRemaining = microtideRemainingSeconds === 0 ? (MICROTIDE_DURATION * 60) : microtideRemainingSeconds;
-  
+
   return {
     macrotide,
     microtide,
@@ -187,7 +188,7 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
 /**
  * Get the next tattva in the sequence
  * Wraps around to the beginning after the last tattva
- * 
+ *
  * @param {number} currentIndex - Current tattva index (0-4)
  * @returns {Object} Next tattva object in the sequence
  */
