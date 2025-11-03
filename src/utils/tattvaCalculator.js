@@ -154,6 +154,7 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   const macrotideIndex = Math.floor(cyclePosition / MACROTIDE_DURATION);
   const macrotide = TATTWAS[macrotideIndex];
 
+
   // Calculate microtide (sub-tattva within the macrotide)
   // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
   // Microtide cycles within each macrotide, resetting at macrotide boundaries
@@ -162,8 +163,7 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
 
   // Calculate microtide based on position within the current macrotide
-  const microtideIndexInCycle = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
-  const microtideIndex = (macrotideIndex + microtideIndexInCycle) % TATTWAS.length;
+  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
   const microtide = TATTWAS[microtideIndex];
 
   // Calculate remaining time for current macrotide and microtide in seconds
