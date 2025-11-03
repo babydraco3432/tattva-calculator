@@ -1,7 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
-import { FONT_SIZES, COLORS, LAYOUT } from '../constants/styles';
+import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS, SIZES, EFFECTS } from '../constants/styles';
+import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
+
+/**
+ * Small shape component for displaying tattva shapes in the table
+ */
+const TattvaSmallShape = ({ tattva, uniqueId }) => {
+  const size = SIZES.TATTVA_SHAPE_TINY;
+  const containerStyle = {
+    display: 'inline-block',
+    width: `${size}px`,
+    height: `${size}px`,
+    position: 'relative',
+    marginRight: '10px',
+    verticalAlign: 'middle',
+  };
+
+  const renderShape = () => {
+    const shapeProps = {
+      size,
+      color: tattva.shapeColor,
+      isMicrotide: false,
+    };
+
+    switch (tattva.shape) {
+      case 'oval':
+        return <OvalShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
+      case 'circle':
+        return <CircleShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
+      case 'triangle':
+        // Triangle needs special positioning to center properly
+        return <TriangleShape {...shapeProps} position={{ top: SHAPE_POSITIONS.TRIANGLE_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
+      case 'square':
+        return <SquareShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} />;
+      case 'crescent':
+        return <CrescentShape {...shapeProps} position={{ top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET, left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET }} uniqueId={uniqueId} />;
+      default:
+        return null;
+    }
+  };
+
+  return <span style={containerStyle}>{renderShape()}</span>;
+};
+
+TattvaSmallShape.propTypes = {
+  tattva: PropTypes.shape({
+    shape: PropTypes.string.isRequired,
+    shapeColor: PropTypes.string.isRequired,
+  }).isRequired,
+  uniqueId: PropTypes.string.isRequired,
+};
 
 /**
  * DailyTides component displays a timetable of tattwas from sunrise to next sunrise
@@ -57,7 +107,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
     padding: '14px 12px',
-    borderBottom: '1px solid #e8e8e8',
+    borderBottom: `1px solid ${COLORS.TABLE_BORDER}`,
     color: tattvaTextColor || COLORS.DETAIL_TEXT,
     backgroundColor: tattvaBackgroundColor || 'transparent',
     textAlign: 'center',
@@ -68,7 +118,8 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
 
   const rowStyle = (isCurrentTide) => ({
     cursor: 'default',
-    boxShadow: isCurrentTide ? 'inset 0 0 0 2px #3498db' : 'none',
+    boxShadow: isCurrentTide ? EFFECTS.BOX_SHADOW_CURRENT_TIDE(COLORS.HIGHLIGHT_BORDER) : 'none',
+    backgroundColor: 'transparent',
     position: 'relative',
   });
 
@@ -102,29 +153,11 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
                   <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.startTime)}</td>
                   <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.endTime)}</td>
                   <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>
-                    <span style={{ 
-                      display: 'inline-block',
-                      width: '14px',
-                      height: '14px',
-                      backgroundColor: entry.macrotide.backgroundColor,
-                      border: entry.macrotide.backgroundColor === '#FFFFFF' ? '1px solid #ccc' : 'none',
-                      marginRight: '10px',
-                      verticalAlign: 'middle',
-                      borderRadius: '2px',
-                    }} />
+                    <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${index}`} />
                     {entry.macrotide.name} ({entry.macrotide.element})
                   </td>
                   <td style={getTdStyle(isCurrent, entry.microtide.backgroundColor, entry.microtide.textColor)}>
-                    <span style={{ 
-                      display: 'inline-block',
-                      width: '14px',
-                      height: '14px',
-                      backgroundColor: entry.microtide.backgroundColor,
-                      border: entry.microtide.backgroundColor === '#FFFFFF' ? '1px solid #ccc' : 'none',
-                      marginRight: '10px',
-                      verticalAlign: 'middle',
-                      borderRadius: '2px',
-                    }} />
+                    <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${index}`} />
                     {entry.microtide.name} ({entry.microtide.element})
                   </td>
                 </tr>

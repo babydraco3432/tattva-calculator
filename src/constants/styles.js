@@ -5,6 +5,7 @@
 
 // Size constants
 export const SIZES = {
+  TATTVA_SHAPE_TINY: 14, // Small size for table icons
   TATTVA_SHAPE_SMALL: 100,
   TATTVA_SHAPE_NORMAL: 200,
   TATTVA_SHAPE_LARGE: 400,
@@ -48,12 +49,16 @@ export const COLORS = {
   DANGER: '#FF1744',
   BACKGROUND_LIGHT: '#f0f2f5',
   DARK_HEADING: '#222',
+  HIGHLIGHT_BACKGROUND: '#fffacd', // Light yellow for highlighting current tide
+  HIGHLIGHT_BORDER: '#ffd700', // Gold for highlighting current tide border
+  TABLE_BORDER: '#e8e8e8', // Light gray for table cell borders
 };
 
 // Border and shadow styles
 export const EFFECTS = {
   BOX_SHADOW_DEFAULT: '0 4px 8px rgba(0,0,0,0.3)',
   BOX_SHADOW_SCRYING: '0 0 50px rgba(255,255,255,0.5)',
+  BOX_SHADOW_CURRENT_TIDE: (color) => `0 0 0 3px ${color}, inset 0 0 0 2px ${color}`,
   BORDER_RADIUS: '10px',
   BORDER_WIDTH_DEFAULT: '3px',
   BORDER_WIDTH_SCRYING: '4px',

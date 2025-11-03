@@ -51,8 +51,8 @@ export const TATTWAS = [
   {
     name: 'Apas',
     element: 'Water',
-    backgroundColor: '#C0C0C0', // Silver background
-    textColor: '#000000', // Black text
+    backgroundColor: '#000000', // Black background
+    textColor: '#C0C0C0', // Silver text
     shapeColor: '#C0C0C0', // Silver crescent
     shape: 'crescent',
     description: 'Water element'
@@ -156,6 +156,7 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
   
   // Calculate microtide (sub-tattva within the macrotide)
   // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
+  // Microtide always cycles from Akasha to Prithvi (0-4), regardless of macrotide
   const MICROTIDE_DURATION = MACROTIDE_DURATION / 5;
   const positionInMacrotide = cyclePosition % MACROTIDE_DURATION;
   const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
