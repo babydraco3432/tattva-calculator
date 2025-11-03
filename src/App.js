@@ -121,6 +121,7 @@ function App() {
         <DailyTides 
           schedule={dailySchedule}
           sunrise={tattvaData.sunrise}
+          currentTime={currentTime}
         />
       )}
     </div>
