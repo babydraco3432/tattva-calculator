@@ -156,13 +156,14 @@ export const calculateTattva = (currentTime = new Date(), latitude = DEFAULT_LAT
 
   // Calculate microtide (sub-tattva within the macrotide)
   // Each microtide lasts 1/5 of the macrotide duration (24 minutes when macrotide is 120 minutes)
-  // Microtide always cycles from Akasha to Prithvi (0-4), regardless of macrotide
+  // Microtide cycles within each macrotide, resetting at macrotide boundaries
   const MICROTIDE_DURATION = MACROTIDE_DURATION / 5;
+  const positionInMacrotide = cyclePosition % MACROTIDE_DURATION;
   const positionInMacrotideSeconds = cyclePositionSeconds % (MACROTIDE_DURATION * 60);
 
-  // Use absolute cycle position to ensure continuous 24-minute microtide cycling
-  const microtideIndex = Math.floor(cyclePosition / MICROTIDE_DURATION);
-  const microtide = TATTWAS[microtideIndex % TATTWAS.length];
+  // Calculate microtide based on position within the current macrotide
+  const microtideIndex = Math.floor(positionInMacrotide / MICROTIDE_DURATION);
+  const microtide = TATTWAS[microtideIndex];
 
   // Calculate remaining time for current macrotide and microtide in seconds
   const macrotideRemainingSeconds = (MACROTIDE_DURATION * 60) - positionInMacrotideSeconds;
