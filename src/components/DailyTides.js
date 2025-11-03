@@ -108,8 +108,8 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
   const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
     padding: '14px 12px',
     borderBottom: `1px solid ${COLORS.TABLE_BORDER}`,
-    color: isCurrentTide ? COLORS.DETAIL_TEXT : (tattvaTextColor || COLORS.DETAIL_TEXT),
-    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : (tattvaBackgroundColor || 'transparent'),
+    color: tattvaTextColor || COLORS.DETAIL_TEXT,
+    backgroundColor: tattvaBackgroundColor || 'transparent',
     textAlign: 'center',
     fontWeight: isCurrentTide ? 'bold' : 'normal',
     fontSize: isCurrentTide ? '15px' : FONT_SIZES.DETAIL,
@@ -119,7 +119,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
   const rowStyle = (isCurrentTide) => ({
     cursor: 'default',
     boxShadow: isCurrentTide ? EFFECTS.BOX_SHADOW_CURRENT_TIDE(COLORS.HIGHLIGHT_BORDER) : 'none',
-    backgroundColor: isCurrentTide ? COLORS.HIGHLIGHT_BACKGROUND : 'transparent',
+    backgroundColor: 'transparent',
     position: 'relative',
   });
 
