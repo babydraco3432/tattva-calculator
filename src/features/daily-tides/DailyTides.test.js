@@ -3,12 +3,12 @@ import { render, screen, within } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import DailyTides from './DailyTides';
 
-jest.mock('../utils/timeFormatter', () => ({
+jest.mock('../../shared/utils/timeFormatter', () => ({
   formatTime: jest.fn((date) => `time-${date.toISOString()}`),
   formatDateWithOrdinal: jest.fn((date) => `date-${date.toISOString()}`),
 }));
 
-const { formatTime, formatDateWithOrdinal } = jest.requireMock('../utils/timeFormatter');
+const { formatTime, formatDateWithOrdinal } = jest.requireMock('../../shared/utils/timeFormatter');
 
 const sunrise = new Date('2025-11-03T06:37:59.000Z');
 const schedule = [

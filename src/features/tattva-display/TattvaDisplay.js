@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TattvaShape from './TattvaShape';
-import { formatTime, formatMacrotideRemaining, formatMicrotideRemaining } from '../utils/timeFormatter';
+import TattvaShape from '../../shared/components/TattvaShape';
+import { formatTime, formatMacrotideRemaining, formatMicrotideRemaining } from '../../shared/utils/timeFormatter';
 import {
   SIZES,
   FONT_SIZES,
@@ -9,7 +9,7 @@ import {
   LAYOUT,
   ANIMATIONS,
   Z_INDEX
-} from '../constants/styles';
+} from '../../shared/styles/styles';
 
 const TattvaDisplay = ({ tattvaData, currentTime, scryingMode, setScryingMode }) => {
   const { macrotide, microtide, macrotideRemainingSeconds, microtideRemainingSeconds, sunrise } = tattvaData;

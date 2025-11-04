@@ -2,13 +2,13 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import App from './App';
-import { useGeolocation } from './hooks/useGeolocation';
-import { useTattvaUpdates } from './hooks/useTattvaUpdates';
-import { generateDailySchedule } from './utils/tattvaSchedule';
+import { useGeolocation } from './shared/hooks/useGeolocation';
+import { useTattvaUpdates } from './shared/hooks/useTattvaUpdates';
+import { generateDailySchedule } from './shared/utils/tattvaSchedule';
 
-jest.mock('./hooks/useGeolocation');
-jest.mock('./hooks/useTattvaUpdates');
-jest.mock('./utils/tattvaSchedule');
+jest.mock('./shared/hooks/useGeolocation');
+jest.mock('./shared/hooks/useTattvaUpdates');
+jest.mock('./shared/utils/tattvaSchedule');
 
 const mockLocation = { latitude: 45.5, longitude: -73.56 };
 const mockMacrotide = {

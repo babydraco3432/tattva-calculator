@@ -37,7 +37,7 @@ class ErrorBoundary extends React.Component {
             </p>
             <button 
               style={styles.button}
-              onClick={() => window.location.reload()}
+              onClick={() => globalThis.location.reload()}
             >
               Refresh Page
             </button>
@@ -46,7 +46,7 @@ class ErrorBoundary extends React.Component {
                 <summary style={styles.summary}>Error details</summary>
                 <pre style={styles.pre}>
                   {this.state.error.toString()}
-                  {this.state.errorInfo && this.state.errorInfo.componentStack}
+                  {this.state.errorInfo?.componentStack}
                 </pre>
               </details>
             )}

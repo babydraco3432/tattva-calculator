@@ -1,16 +1,16 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { SHAPE_POSITIONS } from '../constants/styles';
+import { SHAPE_POSITIONS } from '../../shared/styles/styles';
 
-jest.mock('../utils/timeFormatter', () => ({
+jest.mock('../../shared/utils/timeFormatter', () => ({
   formatTime: jest.fn((date) => date.toISOString()),
   formatDateWithOrdinal: jest.fn((date) => date.toISOString()),
 }));
 
 const capturedShapes = [];
 
-jest.mock('./shapes/ShapeComponents', () => {
+jest.mock('../../shared/components/shapes/ShapeComponents', () => {
   const React = require('react');
   const capture = (type) => ({ position, uniqueId }) => {
     capturedShapes.push({ type, position, uniqueId });

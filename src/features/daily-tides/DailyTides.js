@@ -1,74 +1,9 @@
 import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
-import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS, SIZES } from '../constants/styles';
-import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
-
-const containerStyle = {
-  padding: LAYOUT.PADDING_DEFAULT,
-  maxWidth: '1200px',
-  margin: '0 auto',
-};
-
-const titleStyle = {
-  fontSize: FONT_SIZES.TITLE_MEDIUM,
-  fontWeight: 'bold',
-  marginBottom: LAYOUT.MARGIN_BOTTOM_MEDIUM,
-  color: COLORS.DARK_HEADING,
-  textAlign: 'center',
-};
-
-const sunriseInfoStyle = {
-  fontSize: FONT_SIZES.SMALL,
-  color: COLORS.SUBTLE_TEXT,
-  marginBottom: LAYOUT.MARGIN_BOTTOM_LARGE,
-  textAlign: 'center',
-};
-
-const tableContainerStyle = {
-  overflowX: 'auto',
-  backgroundColor: '#fff',
-  borderRadius: '12px',
-  boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
-};
-
-const tableStyle = {
-  width: '100%',
-  borderCollapse: 'collapse',
-  fontSize: FONT_SIZES.DETAIL,
-  tableLayout: 'fixed',
-};
-
-const thStyle = {
-  backgroundColor: '#2c3e50',
-  color: '#fff',
-  padding: '16px 12px',
-  textAlign: 'center',
-  fontWeight: '600',
-  borderBottom: '3px solid #34495e',
-  fontSize: '15px',
-  letterSpacing: '0.5px',
-  textTransform: 'uppercase',
-};
-
-const defaultRowStyle = {
-  cursor: 'default',
-  backgroundColor: 'transparent',
-  position: 'relative',
-};
-
-const highlightRowStyle = {
-  cursor: 'default',
-  position: 'relative',
-  transition: 'box-shadow 0.3s ease',
-};
-
-const highlightGridStyle = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(4, 1fr)',
-  alignItems: 'stretch',
-  width: '100%',
-};
+import { formatTime, formatDateWithOrdinal } from '../../shared/utils/timeFormatter';
+import { FONT_SIZES, COLORS, SHAPE_POSITIONS, SIZES } from '../../shared/styles/styles';
+import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from '../../shared/components/shapes/ShapeComponents';
+import styles from './DailyTides.module.css';
 
 const DEFAULT_SHAPE_POSITION = {
   top: SHAPE_POSITIONS.DEFAULT_TOP_OFFSET,
@@ -86,15 +21,6 @@ const SHAPE_CONFIG = {
   triangle: { Component: TriangleShape, position: TRIANGLE_SHAPE_POSITION },
   square: { Component: SquareShape, position: DEFAULT_SHAPE_POSITION },
   crescent: { Component: CrescentShape, position: DEFAULT_SHAPE_POSITION, needsUniqueId: true },
-};
-
-const shapeContainerStyle = {
-  display: 'inline-block',
-  width: `${SIZES.TATTVA_SHAPE_TINY}px`,
-  height: `${SIZES.TATTVA_SHAPE_TINY}px`,
-  position: 'relative',
-  marginRight: '10px',
-  verticalAlign: 'middle',
 };
 
 const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
@@ -118,24 +44,11 @@ const highlightCellStyle = (macroColor, microColor) => ({
 });
 
 const highlightTimeStyle = (textColor) => ({
-  padding: '14px 12px',
-  textAlign: 'center',
-  fontWeight: '800',
-  fontSize: '16px',
   color: textColor || '#ffffff',
-  textShadow: '0 0 10px rgba(0, 0, 0, 0.45)',
 });
 
 const highlightInfoStyle = (textColor) => ({
-  padding: '14px 12px',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  gap: '10px',
-  fontWeight: '800',
-  fontSize: '16px',
   color: textColor || '#ffffff',
-  textShadow: '0 0 10px rgba(0, 0, 0, 0.45)',
 });
 
 const highlightCellBackground = (macrotide, microtide) => ({
@@ -199,7 +112,7 @@ const TattvaSmallShapeBase = ({ tattva, uniqueId }) => {
   }
 
   return (
-    <span style={shapeContainerStyle}>
+    <span className={styles.shapeContainer}>
       <Component {...shapeProps} />
     </span>
   );
@@ -225,20 +138,25 @@ const HighlightedTideRow = memo(({ row }) => {
   );
 
   return (
-    <tr data-testid="current-tide-row" style={highlightRowStyle}>
-      <td colSpan={4} data-testid="current-tide-cell" style={highlightCellStyle(macroBackground, microBackground)}>
-        <div data-testid="current-tide-grid" style={highlightGridStyle}>
-          <div data-testid="current-tide-start" style={highlightTimeStyle(macroTextColor)}>
+    <tr data-testid="current-tide-row" className={styles.highlightRow}>
+      <td
+        colSpan={4}
+        data-testid="current-tide-cell"
+        className={styles.highlightCell}
+        style={highlightCellStyle(macroBackground, microBackground)}
+      >
+        <div data-testid="current-tide-grid" className={styles.highlightGrid}>
+          <div data-testid="current-tide-start" className={styles.highlightTime} style={highlightTimeStyle(macroTextColor)}>
             <span>{formattedStart}</span>
           </div>
-          <div data-testid="current-tide-end" style={highlightTimeStyle(microTextColor)}>
+          <div data-testid="current-tide-end" className={styles.highlightTime} style={highlightTimeStyle(microTextColor)}>
             <span>{formattedEnd}</span>
           </div>
-          <div data-testid="current-tide-macro" style={highlightInfoStyle(macroTextColor)}>
+          <div data-testid="current-tide-macro" className={styles.highlightInfo} style={highlightInfoStyle(macroTextColor)}>
             <TattvaSmallShape tattva={data.macrotide} uniqueId={`macro-${entryKey}`} />
             {data.macrotide.name} ({data.macrotide.element})
           </div>
-          <div data-testid="current-tide-micro" style={highlightInfoStyle(microTextColor)}>
+          <div data-testid="current-tide-micro" className={styles.highlightInfo} style={highlightInfoStyle(microTextColor)}>
             <TattvaSmallShape tattva={data.microtide} uniqueId={`micro-${entryKey}`} />
             {data.microtide.name} ({data.microtide.element})
           </div>
@@ -260,14 +178,14 @@ const StandardTideRow = memo(({ row }) => {
   const { data, formattedStart, formattedEnd, isCurrent, entryKey } = row;
 
   return (
-    <tr style={defaultRowStyle}>
-      <td style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>{formattedStart}</td>
-      <td style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>{formattedEnd}</td>
-      <td style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>
+    <tr className={styles.defaultRow}>
+      <td className={styles.bodyCell} style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>{formattedStart}</td>
+      <td className={styles.bodyCell} style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>{formattedEnd}</td>
+      <td className={styles.bodyCell} style={getTdStyle(isCurrent, data.macrotide.backgroundColor, data.macrotide.textColor)}>
         <TattvaSmallShape tattva={data.macrotide} uniqueId={`macro-${entryKey}`} />
         {data.macrotide.name} ({data.macrotide.element})
       </td>
-      <td style={getTdStyle(isCurrent, data.microtide.backgroundColor, data.microtide.textColor)}>
+      <td className={styles.bodyCell} style={getTdStyle(isCurrent, data.microtide.backgroundColor, data.microtide.textColor)}>
         <TattvaSmallShape tattva={data.microtide} uniqueId={`micro-${entryKey}`} />
         {data.microtide.name} ({data.microtide.element})
       </td>
@@ -295,20 +213,18 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
   }, [schedule, currentTime]);
 
   return (
-    <div style={containerStyle}>
-      <h2 style={titleStyle}>Tattva Tides for {formatDateWithOrdinal(sunrise)}</h2>
-      <div style={sunriseInfoStyle}>
-        Schedule from sunrise at {safeFormatTime(sunrise)}
-      </div>
+    <div className={styles.container}>
+      <h2 className={styles.title}>Tattva Tides for {formatDateWithOrdinal(sunrise)}</h2>
+      <div className={styles.sunriseInfo}>Schedule from sunrise at {safeFormatTime(sunrise)}</div>
 
-      <div style={tableContainerStyle}>
-        <table style={tableStyle}>
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
           <thead>
             <tr>
-              <th style={thStyle}>Start Time</th>
-              <th style={thStyle}>End Time</th>
-              <th style={thStyle}>Macrotide</th>
-              <th style={thStyle}>Microtide</th>
+              <th className={styles.headCell}>Start Time</th>
+              <th className={styles.headCell}>End Time</th>
+              <th className={styles.headCell}>Macrotide</th>
+              <th className={styles.headCell}>Microtide</th>
             </tr>
           </thead>
           <tbody>

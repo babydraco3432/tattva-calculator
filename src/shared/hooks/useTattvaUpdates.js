@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { calculateTattva } from '../utils/tattvaCalculator';
-import { DURATIONS } from '../constants/styles';
+import { DURATIONS } from '../styles/styles';
 
 /**
  * Custom hook to manage tattva data updates
