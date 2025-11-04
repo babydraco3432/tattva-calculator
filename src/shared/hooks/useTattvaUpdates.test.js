@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { render, screen, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { useTattvaUpdates } from './useTattvaUpdates';
@@ -8,7 +9,7 @@ jest.mock('../utils/tattvaCalculator', () => ({
   calculateTattva: jest.fn(),
 }));
 
-jest.mock('../constants/styles', () => ({
+jest.mock('../styles/styles', () => ({
   DURATIONS: { UPDATE_INTERVAL_MS: 1000 },
 }));
 
@@ -21,6 +22,13 @@ const TattvaTester = ({ location }) => {
       <div data-testid="tattva">{tattvaData?.id ?? ''}</div>
     </>
   );
+};
+
+TattvaTester.propTypes = {
+  location: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+  }),
 };
 
 

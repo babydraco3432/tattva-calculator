@@ -1,10 +1,10 @@
 import React, { useState, useMemo } from 'react';
-import TattvaDisplay from './components/TattvaDisplay';
-import DailyTides from './components/DailyTides';
-import { useGeolocation } from './hooks/useGeolocation';
-import { useTattvaUpdates } from './hooks/useTattvaUpdates';
-import { generateDailySchedule } from './utils/tattvaSchedule';
-import { FONT_SIZES, COLORS, LAYOUT, FONTS } from './constants/styles';
+import TattvaDisplay from './features/tattva-display/TattvaDisplay';
+import DailyTides from './features/daily-tides/DailyTides';
+import { useGeolocation } from './shared/hooks/useGeolocation';
+import { useTattvaUpdates } from './shared/hooks/useTattvaUpdates';
+import { generateDailySchedule } from './shared/utils/tattvaSchedule';
+import { FONT_SIZES, COLORS, LAYOUT, FONTS } from './shared/styles/styles';
 
 /**
  * Main App component for the Tattva Calculator

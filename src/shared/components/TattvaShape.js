@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { renderShape } from './shapes/shapeFactory';
 import { getSubelementColor, getPositionOffset } from '../utils/shapeHelpers';
-import { SIZES, EFFECTS } from '../constants/styles';
+import { SIZES, EFFECTS } from '../styles/styles';
 
 const TattvaShape = ({ tattva, microtide, size = SIZES.TATTVA_SHAPE_SMALL, scryingMode = false }) => {
   const { shape, backgroundColor, shapeColor, name } = tattva;

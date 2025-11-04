@@ -54,10 +54,10 @@ describe('tattvaSchedule', () => {
       
       const tattvaNames = TATTWAS.map(t => t.name);
       
-      schedule.forEach(entry => {
+      for (const entry of schedule) {
         expect(tattvaNames).toContain(entry.macrotide.name);
         expect(tattvaNames).toContain(entry.microtide.name);
-      });
+      }
     });
   });
 });

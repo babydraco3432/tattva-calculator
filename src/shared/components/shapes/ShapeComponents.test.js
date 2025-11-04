@@ -81,7 +81,7 @@ describe('ShapeComponents', () => {
     const svg = container.querySelector('svg');
     const mask = svg.querySelector('mask');
     expect(mask.id).toBe(`crescentMask-${uniqueId}`);
-    const ellipse = svg.querySelector('ellipse[mask]');
+  const ellipse = svg.querySelector('ellipse[mask]');
     expect(ellipse.getAttribute('mask')).toBe(`url(#crescentMask-${uniqueId})`);
   });
 });

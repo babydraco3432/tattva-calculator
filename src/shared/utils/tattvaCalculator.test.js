@@ -1,4 +1,4 @@
-import { calculateTattva, TATTWAS, getSunriseTime, getSunsetTime } from '../utils/tattvaCalculator';
+import { calculateTattva, TATTWAS, getSunriseTime, getSunsetTime } from './tattvaCalculator';
 import SunCalc from 'suncalc';
 
 // Mock SunCalc to return consistent sunrise times for testing

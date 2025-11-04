@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import TattvaDisplay from './TattvaDisplay';
 
-jest.mock('../utils/timeFormatter', () => ({
+jest.mock('../../shared/utils/timeFormatter', () => ({
   formatTime: jest.fn(() => 'mock-time'),
   formatMacrotideRemaining: jest.fn((seconds) => `macro-${seconds}`),
   formatMicrotideRemaining: jest.fn((seconds) => `micro-${seconds}`),
@@ -13,7 +13,7 @@ const {
   formatTime,
   formatMacrotideRemaining,
   formatMicrotideRemaining,
-} = jest.requireMock('../utils/timeFormatter');
+} = jest.requireMock('../../shared/utils/timeFormatter');
 
 const baseTattvaData = {
   macrotide: {
@@ -65,11 +65,11 @@ describe('TattvaDisplay', () => {
       props.tattvaData.microtideRemainingSeconds
     );
 
-  expect(screen.getByRole('timer')).toHaveTextContent(/Current Time:/);
-  const macrotideSection = screen.getByText(/Current Macrotide:/).parentElement;
-  const microtideSection = screen.getByText(/Current Microtide:/).parentElement;
-  expect(macrotideSection).toHaveTextContent('Akasha (Ether)');
-  expect(microtideSection).toHaveTextContent('Vayu (Air)');
+    expect(screen.getByRole('timer')).toHaveTextContent(/Current Time:/);
+    const macrotideSection = screen.getByText(/Current Macrotide:/).parentElement;
+    const microtideSection = screen.getByText(/Current Microtide:/).parentElement;
+    expect(macrotideSection).toHaveTextContent('Akasha (Ether)');
+    expect(microtideSection).toHaveTextContent('Vayu (Air)');
     expect(screen.getByRole('button', { name: /Enter scrying mode/i })).toBeInTheDocument();
   });
 
