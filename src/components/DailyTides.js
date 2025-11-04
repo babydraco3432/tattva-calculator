@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatTime, formatDateWithOrdinal } from '../utils/timeFormatter';
-import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS, SIZES, EFFECTS } from '../constants/styles';
+import { FONT_SIZES, COLORS, LAYOUT, SHAPE_POSITIONS, SIZES } from '../constants/styles';
 import { OvalShape, CircleShape, TriangleShape, SquareShape, CrescentShape } from './shapes/ShapeComponents';
 
 /**
@@ -91,6 +91,7 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
     width: '100%',
     borderCollapse: 'collapse',
     fontSize: FONT_SIZES.DETAIL,
+    tableLayout: 'fixed',
   };
 
   const thStyle = {
@@ -116,11 +117,53 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
     transition: 'all 0.2s ease',
   });
 
-  const rowStyle = (isCurrentTide) => ({
+  const defaultRowStyle = {
     cursor: 'default',
-    boxShadow: isCurrentTide ? EFFECTS.BOX_SHADOW_CURRENT_TIDE(COLORS.HIGHLIGHT_BORDER) : 'none',
     backgroundColor: 'transparent',
     position: 'relative',
+  };
+
+  const highlightRowStyle = {
+    cursor: 'default',
+    position: 'relative',
+    transition: 'box-shadow 0.3s ease',
+  };
+
+  const highlightCellStyle = (macroColor, microColor) => ({
+    padding: 0,
+    border: 'none',
+    background: `linear-gradient(90deg, ${macroColor} 0%, ${macroColor} 38%, ${microColor} 100%)`,
+    borderRadius: '18px',
+    boxShadow: '0 20px 35px rgba(0, 0, 0, 0.25)',
+    overflow: 'hidden',
+  });
+
+  const highlightGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(4, 1fr)',
+    alignItems: 'stretch',
+    width: '100%',
+  };
+
+  const highlightTimeStyle = (textColor) => ({
+    padding: '14px 12px',
+    textAlign: 'center',
+    fontWeight: '800',
+    fontSize: '16px',
+    color: textColor || '#ffffff',
+    textShadow: '0 0 10px rgba(0, 0, 0, 0.45)',
+  });
+
+  const highlightInfoStyle = (textColor) => ({
+    padding: '14px 12px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: '10px',
+    fontWeight: '800',
+    fontSize: '16px',
+    color: textColor || '#ffffff',
+    textShadow: '0 0 10px rgba(0, 0, 0, 0.45)',
   });
 
   // Helper to determine if a schedule entry is the current tide
@@ -146,18 +189,54 @@ const DailyTides = ({ schedule, sunrise, currentTime }) => {
             </tr>
           </thead>
           <tbody>
-            {schedule.map((entry, index) => {
+            {schedule.map((entry) => {
               const isCurrent = isCurrentTide(entry);
+              const entryKey = entry.startTime.toISOString();
+              const formattedStartRaw = formatTime(entry.startTime);
+              const formattedEndRaw = formatTime(entry.endTime);
+              const formattedStart = formattedStartRaw || entry.startTime.toLocaleTimeString();
+              const formattedEnd = formattedEndRaw || entry.endTime.toLocaleTimeString();
+
+              if (isCurrent) {
+                const macroColor = entry.macrotide.backgroundColor || COLORS.HIGHLIGHT_BORDER;
+                const microColor = entry.microtide.backgroundColor || COLORS.HIGHLIGHT_BORDER;
+                const macroTextColor = entry.macrotide.textColor || '#ffffff';
+                const microTextColor = entry.microtide.textColor || '#ffffff';
+
+                return (
+                  <tr key={entryKey} data-testid="current-tide-row" style={highlightRowStyle}>
+                    <td colSpan={4} data-testid="current-tide-cell" style={highlightCellStyle(macroColor, microColor)}>
+                      <div data-testid="current-tide-grid" style={highlightGridStyle}>
+                        <div data-testid="current-tide-start" style={highlightTimeStyle(macroTextColor)}>
+                          <span>{formattedStart}</span>
+                        </div>
+                        <div data-testid="current-tide-end" style={highlightTimeStyle(microTextColor)}>
+                          <span>{formattedEnd}</span>
+                        </div>
+                        <div data-testid="current-tide-macro" style={highlightInfoStyle(macroTextColor)}>
+                          <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${entryKey}`} />
+                          {entry.macrotide.name} ({entry.macrotide.element})
+                        </div>
+                        <div data-testid="current-tide-micro" style={highlightInfoStyle(microTextColor)}>
+                          <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${entryKey}`} />
+                          {entry.microtide.name} ({entry.microtide.element})
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              }
+
               return (
-                <tr key={index} style={rowStyle(isCurrent)}>
-                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.startTime)}</td>
-                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formatTime(entry.endTime)}</td>
+                <tr key={entryKey} style={defaultRowStyle}>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formattedStart}</td>
+                  <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>{formattedEnd}</td>
                   <td style={getTdStyle(isCurrent, entry.macrotide.backgroundColor, entry.macrotide.textColor)}>
-                    <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${index}`} />
+                    <TattvaSmallShape tattva={entry.macrotide} uniqueId={`macro-${entryKey}`} />
                     {entry.macrotide.name} ({entry.macrotide.element})
                   </td>
                   <td style={getTdStyle(isCurrent, entry.microtide.backgroundColor, entry.microtide.textColor)}>
-                    <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${index}`} />
+                    <TattvaSmallShape tattva={entry.microtide} uniqueId={`micro-${entryKey}`} />
                     {entry.microtide.name} ({entry.microtide.element})
                   </td>
                 </tr>

@@ -23,14 +23,14 @@ describe('Tattva Calculator', () => {
     });
 
     test('each tattva should have required properties', () => {
-      TATTWAS.forEach(tattva => {
+      for (const tattva of TATTWAS) {
         expect(tattva).toHaveProperty('name');
         expect(tattva).toHaveProperty('element');
         expect(tattva).toHaveProperty('backgroundColor');
         expect(tattva).toHaveProperty('shapeColor');
         expect(tattva).toHaveProperty('shape');
         expect(tattva).toHaveProperty('description');
-      });
+      }
     });
 
     test('Vayu should have blue circle on orange background', () => {
