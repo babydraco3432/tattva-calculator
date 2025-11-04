@@ -84,7 +84,7 @@ describe('DailyTides', () => {
     const currentRow = screen.getByTestId('current-tide-row');
     const currentCell = within(currentRow).getByTestId('current-tide-cell');
     expect(currentCell).toHaveAttribute('colspan', '4');
-  expect(currentCell.getAttribute('style')).toEqual(expect.stringContaining('box-shadow'));
+    expect(currentCell.getAttribute('style')).toEqual(expect.stringContaining('box-shadow'));
 
     const currentGrid = within(currentCell).getByTestId('current-tide-grid');
     expect(within(currentGrid).getByTestId('current-tide-macro')).toHaveTextContent('Apas (Water)');
@@ -98,19 +98,15 @@ describe('DailyTides', () => {
 
   it('highlights the current tide row based on current time', () => {
     renderComponent(new Date('2025-11-03T10:45:00.000Z'));
-
-    // console.log for debug
-    // eslint-disable-next-line no-console
-
     const currentRow = screen.getByTestId('current-tide-row');
     const currentCell = within(currentRow).getByTestId('current-tide-cell');
     expect(within(currentRow).getAllByRole('cell')).toHaveLength(1);
-  expect(currentCell.getAttribute('style')).toEqual(expect.stringContaining('box-shadow'));
+    expect(currentCell.getAttribute('style')).toEqual(expect.stringContaining('box-shadow'));
 
-  expect(within(currentCell).getByText(`time-${schedule[0].startTime.toISOString()}`)).toBeInTheDocument();
-  expect(within(currentCell).getByText(`time-${schedule[0].endTime.toISOString()}`)).toBeInTheDocument();
-  expect(within(currentCell).getByText('Apas (Water)')).toBeInTheDocument();
-  expect(within(currentCell).getByText('Prithvi (Earth)')).toBeInTheDocument();
+    expect(within(currentCell).getByText(`time-${schedule[0].startTime.toISOString()}`)).toBeInTheDocument();
+    expect(within(currentCell).getByText(`time-${schedule[0].endTime.toISOString()}`)).toBeInTheDocument();
+    expect(within(currentCell).getByText('Apas (Water)')).toBeInTheDocument();
+    expect(within(currentCell).getByText('Prithvi (Earth)')).toBeInTheDocument();
 
     const upcomingCells = within(screen.getAllByRole('row')[2]).getAllByRole('cell');
     for (const cell of upcomingCells) {
