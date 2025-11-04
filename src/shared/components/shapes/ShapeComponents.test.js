@@ -72,16 +72,17 @@ describe('ShapeComponents', () => {
     });
   });
 
-  it('renders CrescentShape with unique mask id', () => {
-    const uniqueId = 'test-id';
+  it('renders CrescentShape with expected path', () => {
     const { container } = render(
-      <CrescentShape size={90} color="#123123" uniqueId={uniqueId} />
+      <CrescentShape size={90} color="#123123" />
     );
 
     const svg = container.querySelector('svg');
-    const mask = svg.querySelector('mask');
-    expect(mask.id).toBe(`crescentMask-${uniqueId}`);
-  const ellipse = svg.querySelector('ellipse[mask]');
-    expect(ellipse.getAttribute('mask')).toBe(`url(#crescentMask-${uniqueId})`);
+    const path = svg.querySelector('path');
+    expect(path).toBeInTheDocument();
+    expect(path.getAttribute('d')).toBe('M70 12 C46 8 34 24 32 50 C30 76 46 92 70 88 C60 80 62 64 62 50 C62 36 60 20 70 12 Z');
+    expect(path).toHaveAttribute('fill', '#123123');
+    expect(path).toHaveAttribute('fillRule', 'evenodd');
+    expect(path).toHaveAttribute('transform', 'rotate(-90 50 50)');
   });
 });

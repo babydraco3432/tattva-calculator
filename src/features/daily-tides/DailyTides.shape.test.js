@@ -12,18 +12,18 @@ const capturedShapes = [];
 
 jest.mock('../../shared/components/shapes/ShapeComponents', () => {
   const React = require('react');
-  const capture = (type) => ({ position, uniqueId }) => {
-    capturedShapes.push({ type, position, uniqueId });
-    return <div data-testid={`${type}-shape-${uniqueId || 'none'}`} />;
+  const capture = (type) => ({ position }) => {
+    capturedShapes.push({ type, position });
+    return <div data-testid={`${type}-shape`} />;
   };
   return {
     OvalShape: capture('oval'),
     CircleShape: capture('circle'),
     TriangleShape: capture('triangle'),
     SquareShape: capture('square'),
-    CrescentShape: ({ position, uniqueId }) => {
-      capturedShapes.push({ type: 'crescent', position, uniqueId });
-      return <div data-testid={`crescent-shape-${uniqueId}`} />;
+    CrescentShape: ({ position }) => {
+      capturedShapes.push({ type: 'crescent', position });
+      return <div data-testid="crescent-shape" />;
     },
   };
 });
