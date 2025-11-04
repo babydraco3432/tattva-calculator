@@ -47,11 +47,11 @@ describe('shapeFactory renderShape', () => {
     expect(renderElement(element)).toBeInTheDocument();
   });
 
-  it('returns CrescentShape component with uniqueId', () => {
-    const element = renderShape('crescent', baseArgs.size, baseArgs.color, true, baseArgs.position, 'unique');
+  it('returns CrescentShape component', () => {
+    const element = renderShape('crescent', baseArgs.size, baseArgs.color, true, baseArgs.position);
     expect(element.type).toBe(CrescentShape);
     const svg = renderElement(element);
-    expect(svg.querySelector('mask').id).toBe('crescentMask-unique');
+    expect(svg.querySelector('path')).toBeInTheDocument();
   });
 
   it('returns null for unknown shape', () => {

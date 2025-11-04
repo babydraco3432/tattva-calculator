@@ -148,10 +148,7 @@ SquareShape.defaultProps = {
 /**
  * Renders a crescent shape using SVG
  */
-export const CrescentShape = React.memo(({ size, color, isMicrotide, position, uniqueId }) => {
-  // Ensure unique mask ID with fallback
-  const maskId = `crescentMask-${uniqueId || Math.random().toString(36).substring(2, 11)}`;
-
+export const CrescentShape = React.memo(({ size, color, isMicrotide, position }) => {
   const style = {
     position: 'absolute',
     top: position?.top || '50%',
@@ -167,13 +164,13 @@ export const CrescentShape = React.memo(({ size, color, isMicrotide, position, u
       viewBox="0 0 100 100"
       style={style}
     >
-      <defs>
-        <mask id={maskId}>
-          <rect width="100" height="100" fill="white" />
-          <ellipse cx="50" cy="20" rx="43" ry="30" fill="black" />
-        </mask>
-      </defs>
-      <ellipse cx="50" cy="51" rx="48" ry="32" fill={color} mask={`url(#${maskId})`} />
+      <path
+        d="M72 12 C45 4 26 24 24 50 C22 76 45 96 72 88 C60 78 56 64 56 50 C56 36 60 24 72 12 Z"
+        fill={color}
+        fillRule="evenodd"
+        clipRule="evenodd"
+        transform="rotate(-90 50 50)"
+      />
     </svg>
   );
 });
@@ -188,7 +185,6 @@ CrescentShape.propTypes = {
     top: PropTypes.string,
     left: PropTypes.string,
   }),
-  uniqueId: PropTypes.string.isRequired,
 };
 
 CrescentShape.defaultProps = {

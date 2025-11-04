@@ -14,10 +14,9 @@ import {
  * @param {string} color - Color of the shape
  * @param {boolean} isMicrotide - Whether this is a microtide shape
  * @param {object} position - Position offset for the shape
- * @param {string} uniqueId - Unique identifier for SVG masks
  * @returns {React.Element|null} The appropriate shape component or null
  */
-export const renderShape = (shapeType, size, color, isMicrotide = false, position = null, uniqueId = '') => {
+export const renderShape = (shapeType, size, color, isMicrotide = false, position = null) => {
   const shapeProps = { size, color, isMicrotide, position };
 
   switch (shapeType) {
@@ -30,7 +29,7 @@ export const renderShape = (shapeType, size, color, isMicrotide = false, positio
     case 'square':
       return <SquareShape {...shapeProps} />;
     case 'crescent':
-      return <CrescentShape {...shapeProps} uniqueId={uniqueId} />;
+      return <CrescentShape {...shapeProps} />;
     default:
       return null;
   }

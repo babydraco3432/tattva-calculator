@@ -15,12 +15,17 @@ const TRIANGLE_SHAPE_POSITION = {
   left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET,
 };
 
+const CRESCENT_SHAPE_POSITION = {
+  top: SHAPE_POSITIONS.CRESCENT_TOP_OFFSET,
+  left: SHAPE_POSITIONS.DEFAULT_LEFT_OFFSET,
+};
+
 const SHAPE_CONFIG = {
   oval: { Component: OvalShape, position: DEFAULT_SHAPE_POSITION },
   circle: { Component: CircleShape, position: DEFAULT_SHAPE_POSITION },
   triangle: { Component: TriangleShape, position: TRIANGLE_SHAPE_POSITION },
   square: { Component: SquareShape, position: DEFAULT_SHAPE_POSITION },
-  crescent: { Component: CrescentShape, position: DEFAULT_SHAPE_POSITION, needsUniqueId: true },
+  crescent: { Component: CrescentShape, position: CRESCENT_SHAPE_POSITION },
 };
 
 const getTdStyle = (isCurrentTide, tattvaBackgroundColor, tattvaTextColor) => ({
@@ -99,17 +104,13 @@ const TattvaSmallShapeBase = ({ tattva, uniqueId }) => {
     return null;
   }
 
-  const { Component, position, needsUniqueId } = shapeConfig;
+  const { Component, position } = shapeConfig;
   const shapeProps = {
     size: SIZES.TATTVA_SHAPE_TINY,
     color: tattva.shapeColor,
     isMicrotide: false,
     position,
   };
-
-  if (needsUniqueId) {
-    shapeProps.uniqueId = uniqueId;
-  }
 
   return (
     <span className={styles.shapeContainer}>
